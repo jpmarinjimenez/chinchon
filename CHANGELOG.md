@@ -1,5 +1,60 @@
 # Changelog
 
+## [1.2.0] - 2025-10-06
+
+### ✨ Cambios Implementados
+
+#### Lógica de Reenganche Mejorada
+
+**Antes:**
+- Un jugador que alcanzaba el límite se reenganchaba con los puntos del jugador activo (no eliminado) que tuviera más puntos
+- Esto podía resultar en reenganches con jugadores que también habían alcanzado o superado el límite
+
+**Ahora:**
+- ✅ Un jugador se reengancha con los puntos del jugador que esté **más cerca del límite sin alcanzarlo**
+- ✅ Solo se consideran jugadores que estén **por debajo del límite** de eliminación
+- ✅ Se ignoran jugadores que hayan alcanzado o superado el límite
+- ✅ Mejora la justicia y equilibrio del juego
+
+**Ejemplo:**
+```
+Límite: 100 puntos
+- Ana: 104 puntos (alcanzó el límite) ❌
+- Bruno: 95 puntos (el más cercano al límite sin alcanzarlo) ✅
+- Carlos: 60 puntos
+- Diana: 40 puntos
+
+Si Ana se reengancha → tendrá 95 puntos (los de Bruno)
+```
+
+### 🔧 Archivos Modificados
+
+1. **`src/stores/gameStore.js`**
+   - Getter `jugadorConMasPuntosActivo` actualizado
+   - Filtra jugadores que estén por debajo del límite
+   - Retorna el que tenga más puntos (más cerca del límite)
+
+2. **`src/components/ReengancheModal.vue`**
+   - Mensaje de explicación actualizado
+   - Refleja la nueva lógica: "más cerca del límite sin alcanzarlo"
+
+3. **`tests/unit/store.spec.js`**
+   - Test actualizado: "debe reenganchar jugador con los puntos del que está más cerca del límite sin alcanzarlo"
+   - Nuevo test: "debe reenganchar con el segundo jugador si el primero también alcanzó el límite"
+   - Casos edge cubiertos
+
+4. **`README.md`**
+   - Documentación actualizada con nueva lógica de reenganche
+   - Sección "Cómo Jugar" mejorada
+
+### 📊 Tests
+
+**Tests Unitarios:** 29 tests
+- ✅ Actualizado: "debe reenganchar jugador con los puntos del que está más cerca del límite sin alcanzarlo"
+- ✅ Nuevo: "debe reenganchar con el segundo jugador si el primero también alcanzó el límite"
+
+---
+
 ## [1.1.0] - 2025-10-06
 
 ### ✨ Cambios Implementados

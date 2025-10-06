@@ -47,7 +47,7 @@
                   <p class="text-sm text-gray-700 mb-2">
                     <span class="font-semibold">Si se reengancha:</span>
                     Continuará con <span class="font-bold text-blue-600">{{ puntosReenganche }} puntos</span>
-                    (los mismos que el jugador con más puntos activo).
+                    (los mismos que el jugador que está más cerca del límite sin alcanzarlo).
                   </p>
                   <p class="text-sm text-gray-700">
                     <span class="font-semibold">Si se elimina:</span>

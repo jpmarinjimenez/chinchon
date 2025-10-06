@@ -23,7 +23,7 @@ Aplicación web completa para anotar los puntos del juego de cartas **Chinchón*
 - ✅ **Tabla de puntuación**: Vista por columnas (desktop) o tarjetas (móvil)
 - ✅ **Finalizar rondas**: Modal para introducir puntos de cada jugador
 - ✅ **Chinchón (-10 puntos)**: Checkbox para marcar chinchón (solo uno por ronda), con resaltado visual y sonoro
-- ✅ **Sistema de reenganche**: Cuando un jugador alcanza el límite, puede reengancharse con los puntos del jugador activo con más puntos
+- ✅ **Sistema de reenganche**: Cuando un jugador alcanza el límite, puede reengancharse con los puntos del jugador que esté más cerca del límite sin alcanzarlo
 - ✅ **Múltiples reenganches**: Un jugador puede reengancharse varias veces
 - ✅ **Eliminación visual**: Los jugadores eliminados se marcan pero no se borran
 - ✅ **Final de juego**: Termina cuando solo queda un jugador activo
@@ -294,7 +294,7 @@ chinchon-scorekeeper/
 - [x] Sumar puntos al total y guardar en historial
 - [x] Detectar cuando un jugador alcanza el límite
 - [x] Preguntar si quiere reengancharse
-- [x] Reenganchar con puntos del jugador con más puntos activo
+- [x] Reenganchar con puntos del jugador que esté más cerca del límite sin alcanzarlo
 - [x] Permitir múltiples reenganches
 - [x] Marcar jugadores eliminados visualmente
 - [x] Finalizar juego cuando solo queda 1 jugador
@@ -339,7 +339,7 @@ chinchon-scorekeeper/
    - **Puntos normales**: Introduce 0 o más puntos para los demás jugadores
    - **Totales negativos**: Los totales pueden ser negativos
 3. **Límite alcanzado**: Si un jugador alcanza el límite, decide si:
-   - **Reenganchar**: Continúa con los puntos del jugador líder
+   - **Reenganchar**: Continúa con los puntos del jugador que esté más cerca del límite sin alcanzarlo
    - **Eliminar**: Sale del juego
 4. **Final**: El juego termina cuando solo queda un jugador activo
 5. **Ganador**: El jugador con menos puntos gana

@@ -130,20 +130,41 @@ describe('GameStore', () => {
   })
 
   describe('Reenganche', () => {
-    it('debe reenganchar jugador con los puntos del que más tiene', () => {
+    it('debe reenganchar jugador con los puntos del que está más cerca del límite sin alcanzarlo', () => {
       const store = useGameStore()
       store.iniciarNuevoJuego(100, ['Ana', 'Bruno', 'Carlos'])
       
       const [ana, bruno, carlos] = store.jugadores
       
       // Simular puntuaciones
-      ana.puntosAcumulados = 110 // Alcanzó el límite
-      bruno.puntosAcumulados = 60
-      carlos.puntosAcumulados = 40
+      ana.puntosAcumulados = 104 // Alcanzó el límite
+      bruno.puntosAcumulados = 95 // Más cercano al límite sin alcanzarlo
+      carlos.puntosAcumulados = 60
       
       store.reengancharJugador(ana.id)
       
-      expect(ana.puntosAcumulados).toBe(60) // Se reengancha con los puntos de Bruno
+      expect(ana.puntosAcumulados).toBe(95) // Se reengancha con los puntos de Bruno (más cercano al límite)
+      expect(ana.vecesReenganchado).toBe(1)
+    })
+
+    it('debe reenganchar con el segundo jugador si el primero también alcanzó el límite', () => {
+      const store = useGameStore()
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno', 'Carlos', 'Diana'])
+      
+      const [ana, bruno, carlos, diana] = store.jugadores
+      
+      // Simular puntuaciones
+      ana.puntosAcumulados = 110 // Alcanzó el límite
+      bruno.puntosAcumulados = 105 // También alcanzó el límite
+      carlos.puntosAcumulados = 98 // Más cercano al límite sin alcanzarlo
+      diana.puntosAcumulados = 40
+      
+      // Marcar a Bruno como eliminado (ya alcanzó el límite antes)
+      bruno.eliminado = true
+      
+      store.reengancharJugador(ana.id)
+      
+      expect(ana.puntosAcumulados).toBe(98) // Se reengancha con Carlos, no con Bruno
       expect(ana.vecesReenganchado).toBe(1)
     })
 

@@ -37,12 +37,21 @@ export const useGameStore = defineStore('game', {
     },
 
     /**
-     * Obtiene el jugador con más puntos que aún no ha sido eliminado
+     * Obtiene el jugador con más puntos que esté por debajo del límite (no eliminado)
+     * Este es el jugador con el que se reenganchará alguien que alcance el límite
      */
     jugadorConMasPuntosActivo: (state) => {
-      const activos = state.jugadores.filter(j => !j.eliminado)
-      if (activos.length === 0) return null
-      return activos.reduce((max, j) => j.puntosAcumulados > max.puntosAcumulados ? j : max)
+      // Filtrar jugadores que no estén eliminados Y que estén por debajo del límite
+      const activosBajoLimite = state.jugadores.filter(
+        j => !j.eliminado && j.puntosAcumulados < state.limiteEliminacion
+      )
+      
+      if (activosBajoLimite.length === 0) return null
+      
+      // Retornar el que tenga más puntos (más cerca del límite)
+      return activosBajoLimite.reduce((max, j) => 
+        j.puntosAcumulados > max.puntosAcumulados ? j : max
+      )
     },
 
     /**
