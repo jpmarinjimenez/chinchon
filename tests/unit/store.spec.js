@@ -112,6 +112,21 @@ describe('GameStore', () => {
       
       expect(ana.historialPuntos).toEqual([10, 15, -10])
     })
+
+    it('debe permitir totales negativos', () => {
+      const store = useGameStore()
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno'])
+      
+      const [ana, bruno] = store.jugadores
+      
+      // Ana hace chinchón 3 veces
+      store.finalizarRonda({ [ana.id]: -10, [bruno.id]: 25 })
+      store.finalizarRonda({ [ana.id]: -10, [bruno.id]: 30 })
+      store.finalizarRonda({ [ana.id]: -10, [bruno.id]: 20 })
+      
+      expect(ana.puntosAcumulados).toBe(-30)
+      expect(bruno.puntosAcumulados).toBe(75)
+    })
   })
 
   describe('Reenganche', () => {

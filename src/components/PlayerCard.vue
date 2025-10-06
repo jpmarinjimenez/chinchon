@@ -32,8 +32,8 @@
           class="text-3xl font-bold"
           :class="{
             'text-red-600': jugador.puntosAcumulados >= limite,
-            'text-green-600': jugador.puntosAcumulados < limite / 2,
-            'text-yellow-600': jugador.puntosAcumulados >= limite / 2 && jugador.puntosAcumulados < limite
+            'text-green-600': jugador.puntosAcumulados <= 0 || jugador.puntosAcumulados < limite / 2,
+            'text-yellow-600': jugador.puntosAcumulados > 0 && jugador.puntosAcumulados >= limite / 2 && jugador.puntosAcumulados < limite
           }"
         >
           {{ jugador.puntosAcumulados }}

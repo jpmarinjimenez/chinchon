@@ -91,8 +91,8 @@
                     class="px-4 py-4 text-center"
                     :class="{
                       'text-red-600': jugador.puntosAcumulados >= gameStore.limiteEliminacion,
-                      'text-green-600': jugador.puntosAcumulados < gameStore.limiteEliminacion / 2,
-                      'text-yellow-600': jugador.puntosAcumulados >= gameStore.limiteEliminacion / 2 && jugador.puntosAcumulados < gameStore.limiteEliminacion
+                      'text-green-600': jugador.puntosAcumulados <= 0 || jugador.puntosAcumulados < gameStore.limiteEliminacion / 2,
+                      'text-yellow-600': jugador.puntosAcumulados > 0 && jugador.puntosAcumulados >= gameStore.limiteEliminacion / 2 && jugador.puntosAcumulados < gameStore.limiteEliminacion
                     }"
                   >
                     {{ jugador.puntosAcumulados }}

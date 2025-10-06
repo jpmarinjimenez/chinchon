@@ -33,8 +33,8 @@
                   :key="jugador.id"
                   class="flex items-center gap-4 p-4 rounded-lg border-2 transition-all"
                   :class="{
-                    'border-green-400 bg-green-50': puntosRonda[jugador.id] === -10,
-                    'border-gray-200 bg-white': puntosRonda[jugador.id] !== -10
+                    'border-green-400 bg-green-50': hizoChinchon[jugador.id],
+                    'border-gray-200 bg-white': !hizoChinchon[jugador.id]
                   }"
                 >
                   <!-- Nombre del jugador -->
@@ -50,23 +50,42 @@
                     <input
                       v-model.number="puntosRonda[jugador.id]"
                       type="number"
-                      :min="-10"
+                      min="0"
                       max="999"
                       step="1"
                       class="input-field text-center text-lg font-semibold"
                       :class="{
-                        'bg-green-100 border-green-400': puntosRonda[jugador.id] === -10
+                        'bg-green-100 border-green-400': hizoChinchon[jugador.id],
+                        'bg-gray-100': hizoChinchon[jugador.id]
                       }"
                       placeholder="0"
                       required
+                      :disabled="hizoChinchon[jugador.id]"
                       :aria-label="`Puntos para ${jugador.nombre}`"
-                      @input="validarPuntos(jugador.id)"
                       ref="inputPuntos"
                     />
                   </div>
 
+                  <!-- Checkbox de chinchón -->
+                  <div class="flex items-center gap-2">
+                    <input
+                      :id="`chinchon-${jugador.id}`"
+                      v-model="hizoChinchon[jugador.id]"
+                      type="checkbox"
+                      class="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
+                      :aria-label="`${jugador.nombre} hizo chinchón`"
+                      @change="manejarChinchon(jugador.id)"
+                    />
+                    <label
+                      :for="`chinchon-${jugador.id}`"
+                      class="text-sm font-medium text-gray-700 cursor-pointer select-none"
+                    >
+                      Chinchón<br>(-10)
+                    </label>
+                  </div>
+
                   <!-- Indicador de chinchón -->
-                  <div v-if="puntosRonda[jugador.id] === -10" class="text-2xl animate-bounce-slow">
+                  <div v-if="hizoChinchon[jugador.id]" class="text-2xl animate-bounce-slow">
                     🎉
                   </div>
                 </div>
@@ -76,8 +95,9 @@
               <div class="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4">
                 <p class="text-sm text-blue-800">
                   <span class="font-semibold">💡 Consejo:</span>
-                  Introduce <strong>-10</strong> si el jugador hizo chinchón.
-                  Los demás valores deben ser <strong>0 o positivos</strong>.
+                  Marca el checkbox <strong>"Chinchón"</strong> si el jugador hizo -10.
+                  Solo un jugador puede hacer chinchón por ronda.
+                  <span class="block mt-1">Los totales pueden ser negativos.</span>
                 </p>
               </div>
 
@@ -120,12 +140,14 @@ export default {
   emits: ['confirmar', 'cerrar'],
   setup(props, { emit }) {
     const puntosRonda = ref({})
+    const hizoChinchon = ref({})
     const inputPuntos = ref([])
 
-    // Inicializar puntos en 0 para cada jugador
+    // Inicializar puntos y checkboxes para cada jugador
     onMounted(async () => {
       props.jugadores.forEach(jugador => {
         puntosRonda.value[jugador.id] = 0
+        hizoChinchon.value[jugador.id] = false
       })
 
       // Enfocar el primer input
@@ -138,22 +160,23 @@ export default {
     const formularioValido = computed(() => {
       return props.jugadores.every(jugador => {
         const puntos = puntosRonda.value[jugador.id]
-        return puntos !== undefined && puntos !== null && (puntos === -10 || puntos >= 0)
+        return puntos !== undefined && puntos !== null && puntos >= 0
       })
     })
 
-    const validarPuntos = (jugadorId) => {
-      const puntos = puntosRonda.value[jugadorId]
-      
-      // Validar que sea -10 o >= 0
-      if (puntos < -10) {
-        puntosRonda.value[jugadorId] = -10
-      } else if (puntos > -10 && puntos < 0) {
+    const manejarChinchon = (jugadorId) => {
+      if (hizoChinchon.value[jugadorId]) {
+        // Si marcó chinchón, desmarcar todos los demás
+        Object.keys(hizoChinchon.value).forEach(id => {
+          if (id !== jugadorId) {
+            hizoChinchon.value[id] = false
+          }
+        })
+        
+        // Establecer puntos en 0 (se restará 10 al calcular)
         puntosRonda.value[jugadorId] = 0
-      }
-
-      // Reproducir sonido si es -10 (chinchón)
-      if (puntos === -10) {
+        
+        // Reproducir sonido
         reproducirSonidoChinchon()
       }
     }
@@ -183,7 +206,16 @@ export default {
 
     const confirmar = () => {
       if (formularioValido.value) {
-        emit('confirmar', { ...puntosRonda.value })
+        // Construir objeto de puntos, aplicando -10 si hizo chinchón
+        const puntosFinal = {}
+        props.jugadores.forEach(jugador => {
+          if (hizoChinchon.value[jugador.id]) {
+            puntosFinal[jugador.id] = -10
+          } else {
+            puntosFinal[jugador.id] = puntosRonda.value[jugador.id]
+          }
+        })
+        emit('confirmar', puntosFinal)
       }
     }
 
@@ -193,9 +225,10 @@ export default {
 
     return {
       puntosRonda,
+      hizoChinchon,
       inputPuntos,
       formularioValido,
-      validarPuntos,
+      manejarChinchon,
       confirmar,
       cerrar
     }

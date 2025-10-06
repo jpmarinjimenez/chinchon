@@ -22,7 +22,7 @@ Aplicación web completa para anotar los puntos del juego de cartas **Chinchón*
 - ✅ **2-8 jugadores**: Soporte para partidas de 2 hasta 8 jugadores
 - ✅ **Tabla de puntuación**: Vista por columnas (desktop) o tarjetas (móvil)
 - ✅ **Finalizar rondas**: Modal para introducir puntos de cada jugador
-- ✅ **Chinchón (-10 puntos)**: Resaltado visual y sonoro cuando un jugador hace -10
+- ✅ **Chinchón (-10 puntos)**: Checkbox para marcar chinchón (solo uno por ronda), con resaltado visual y sonoro
 - ✅ **Sistema de reenganche**: Cuando un jugador alcanza el límite, puede reengancharse con los puntos del jugador activo con más puntos
 - ✅ **Múltiples reenganches**: Un jugador puede reengancharse varias veces
 - ✅ **Eliminación visual**: Los jugadores eliminados se marcan pero no se borran
@@ -288,7 +288,9 @@ chinchon-scorekeeper/
 - [x] Pedir nombres de jugadores (máximo 8)
 - [x] Mostrar columna por jugador con rondas y total
 - [x] Botón "Finalizar ronda" con modal
-- [x] Permitir -10 puntos (chinchón) con resaltado visual
+- [x] Checkbox para marcar chinchón (-10 puntos) con resaltado visual
+- [x] Solo un jugador puede hacer chinchón por ronda
+- [x] Los totales pueden ser negativos
 - [x] Sumar puntos al total y guardar en historial
 - [x] Detectar cuando un jugador alcanza el límite
 - [x] Preguntar si quiere reengancharse
@@ -332,8 +334,10 @@ chinchon-scorekeeper/
 
 1. **Inicio**: Define el límite de puntos (ej: 100) y los nombres de los jugadores
 2. **Rondas**: Después de cada ronda, haz clic en "Finalizar Ronda" e introduce los puntos:
-   - **-10**: Si hizo chinchón
-   - **0 o más**: Puntos normales
+   - **Checkbox "Chinchón"**: Marca el checkbox si el jugador hizo chinchón (-10 puntos)
+   - **Solo un chinchón por ronda**: Solo un jugador puede marcar el checkbox
+   - **Puntos normales**: Introduce 0 o más puntos para los demás jugadores
+   - **Totales negativos**: Los totales pueden ser negativos
 3. **Límite alcanzado**: Si un jugador alcanza el límite, decide si:
    - **Reenganchar**: Continúa con los puntos del jugador líder
    - **Eliminar**: Sale del juego

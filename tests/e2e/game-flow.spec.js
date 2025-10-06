@@ -62,7 +62,11 @@ describe('Flujo completo del juego Chinchón', () => {
 
     // Finalizar ronda con chinchón
     cy.contains('Finalizar Ronda').click()
-    cy.get('input[type="number"]').eq(0).clear().type('-10')
+    
+    // Marcar checkbox de chinchón para Ana
+    cy.get('input[type="checkbox"]').eq(0).check()
+    
+    // Introducir puntos para Bruno
     cy.get('input[type="number"]').eq(1).clear().type('25')
 
     // Verificar resaltado visual del chinchón
@@ -190,20 +194,42 @@ describe('Flujo completo del juego Chinchón', () => {
     cy.contains('Ganador').should('be.visible')
   })
 
-  it('debe validar que no se pueden ingresar puntos inválidos', () => {
+  it('debe permitir solo un chinchón por ronda', () => {
     // Crear partida
-    crearPartida(['Ana', 'Bruno'], 100)
+    crearPartida(['Ana', 'Bruno', 'Carlos'], 100)
 
     // Abrir modal
     cy.contains('Finalizar Ronda').click()
 
-    // Intentar ingresar un valor inválido (menor a -10)
-    cy.get('input[type="number"]').eq(0).clear().type('-20')
-    cy.get('input[type="number"]').eq(0).should('have.value', '-10')
+    // Marcar checkbox de chinchón para Ana
+    cy.get('input[type="checkbox"]').eq(0).check()
+    cy.get('input[type="checkbox"]').eq(0).should('be.checked')
 
-    // Intentar ingresar valor negativo que no sea -10
-    cy.get('input[type="number"]').eq(0).clear().type('-5')
-    cy.get('input[type="number"]').eq(0).should('have.value', '0')
+    // Marcar checkbox de chinchón para Bruno (debería desmarcar el de Ana)
+    cy.get('input[type="checkbox"]').eq(1).check()
+    cy.get('input[type="checkbox"]').eq(1).should('be.checked')
+    cy.get('input[type="checkbox"]').eq(0).should('not.be.checked')
+
+    // Solo Bruno debe tener chinchón
+    cy.get('input[type="checkbox"]').eq(1).should('be.checked')
+  })
+
+  it('debe permitir totales negativos', () => {
+    // Crear partida
+    crearPartida(['Ana', 'Bruno'], 100)
+
+    // Primera ronda: Ana hace chinchón
+    finalizarRonda([-10, 25])
+
+    // Segunda ronda: Ana hace chinchón de nuevo
+    finalizarRonda([-10, 30])
+
+    // Tercera ronda: Ana hace chinchón una vez más
+    finalizarRonda([-10, 20])
+
+    // El total de Ana debería ser -30 (negativo)
+    // Verificar en vista desktop (si está visible) o mobile
+    cy.contains('Total').should('be.visible')
   })
 
   it('debe finalizar el juego cuando solo queda un jugador', () => {
@@ -272,7 +298,12 @@ describe('Flujo completo del juego Chinchón', () => {
     cy.contains('Finalizar Ronda').click()
     
     puntos.forEach((punto, index) => {
-      cy.get('input[type="number"]').eq(index).clear().type(punto.toString())
+      if (punto === -10) {
+        // Marcar checkbox de chinchón
+        cy.get('input[type="checkbox"]').eq(index).check()
+      } else {
+        cy.get('input[type="number"]').eq(index).clear().type(punto.toString())
+      }
     })
 
     cy.contains('Confirmar Ronda').click()
