@@ -90,17 +90,30 @@
                                 </div>
                             </div>
 
-                            <!-- Ayuda -->
-                            <div class="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4">
-                                <p class="text-sm text-blue-800">
-                                    <span class="font-semibold">💡 Consejo:</span>
-                                    Marca el checkbox <strong>"-10"</strong> si el jugador hizo una jugada especial.
-                                    Solo un jugador puede hacer -10 por ronda.
-                                    <span class="block mt-1"
-                                        >El botón <strong>"🏆 Chinchón"</strong> termina la partida inmediatamente y ese
-                                        jugador gana.</span
-                                    >
-                                </p>
+                            <!-- Botón de ayuda -->
+                            <div class="mt-6">
+                                <button
+                                    type="button"
+                                    @click="mostrarAyuda = !mostrarAyuda"
+                                    class="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
+                                    <span class="text-lg">ℹ️</span>
+                                    {{ mostrarAyuda ? 'Ocultar ayuda' : 'Ver ayuda' }}
+                                </button>
+
+                                <!-- Ayuda colapsable -->
+                                <Transition name="slide-down">
+                                    <div v-if="mostrarAyuda" class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                                        <p class="text-sm text-blue-800">
+                                            <span class="font-semibold">💡 Consejo:</span>
+                                            Marca el checkbox <strong>"-10"</strong> si el jugador hizo una jugada especial.
+                                            Solo un jugador puede hacer -10 por ronda.
+                                            <span class="block mt-1"
+                                                >El botón <strong>"🏆 Chinchón"</strong> termina la partida inmediatamente y
+                                                ese jugador gana.</span
+                                            >
+                                        </p>
+                                    </div>
+                                </Transition>
                             </div>
 
                             <!-- Botones -->
@@ -134,6 +147,7 @@ export default {
         const puntosRonda = ref({});
         const hizoMenos10 = ref({});
         const inputPuntos = ref([]);
+        const mostrarAyuda = ref(false);
 
         // Inicializar puntos y checkboxes para cada jugador
         onMounted(async () => {
@@ -230,6 +244,7 @@ export default {
             puntosRonda,
             hizoMenos10,
             inputPuntos,
+            mostrarAyuda,
             formularioValido,
             manejarMenos10,
             confirmarChinchon,
@@ -239,3 +254,21 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+/* Animación para el panel de ayuda */
+.slide-down-enter-active,
+.slide-down-leave-active {
+    transition: all 0.3s ease;
+}
+
+.slide-down-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+</style>
