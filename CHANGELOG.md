@@ -1,5 +1,98 @@
 # Changelog
 
+## [1.4.0] - 2025-10-06
+
+### ✨ Cambios Implementados
+
+#### Victoria Automática cuando Solo Queda un Jugador Bajo el Límite
+
+**Antes:**
+- Cuando uno o más jugadores alcanzaban el límite, se mostraba el modal de reenganche independientemente de cuántos jugadores quedaran bajo el límite
+- Era posible que todos los jugadores se reengancharan incluso cuando solo quedaba uno por debajo del límite
+
+**Ahora:**
+- ✅ Si **solo 1 jugador** queda por debajo del límite, ese jugador **gana automáticamente**
+- ✅ Los jugadores que alcanzaron el límite son **eliminados automáticamente**
+- ✅ El juego **finaliza inmediatamente** sin mostrar el modal de reenganche
+- ✅ Si **2 o más jugadores** quedan bajo el límite, se muestra el modal de reenganche normalmente
+
+**Ejemplos:**
+
+```
+Caso 1: 2 jugadores
+Límite: 100
+- Ana: 105 pts (alcanza límite) ❌
+- Bruno: 50 pts (bajo límite) ✅
+
+→ Bruno gana automáticamente
+→ No hay modal de reenganche
+→ Partida finalizada
+
+Caso 2: 4 jugadores
+Límite: 100
+- Ana: 110 pts ❌
+- Bruno: 105 pts ❌
+- Carlos: 102 pts ❌
+- Diana: 70 pts ✅
+
+→ Diana gana automáticamente
+→ Los 3 jugadores eliminados
+→ Partida finalizada
+
+Caso 3: 3 jugadores
+Límite: 100
+- Ana: 105 pts (alcanza límite)
+- Bruno: 60 pts (bajo límite) ✅
+- Carlos: 50 pts (bajo límite) ✅
+
+→ Se muestra modal de reenganche para Ana
+→ Quedan 2 jugadores en competencia
+→ Partida continúa
+```
+
+### 🔧 Archivos Modificados
+
+1. **`src/stores/gameStore.js`**
+   - Actualizada función `finalizarRonda()`
+   - Nueva lógica: Verificar cuántos jugadores quedan bajo el límite
+   - Si solo queda 1: eliminar a los demás y finalizar juego
+   - Retornar array vacío para evitar modal de reenganche
+
+2. **`tests/unit/store.spec.js`**
+   - Nueva sección: "Victoria automática cuando solo queda un jugador bajo el límite"
+   - Nuevo test: "debe finalizar el juego si solo queda 1 jugador bajo el límite (2 jugadores)"
+   - Nuevo test: "debe finalizar el juego si solo queda 1 jugador bajo el límite (4 jugadores)"
+   - Nuevo test: "debe permitir reenganche si quedan 2 o más jugadores bajo el límite"
+
+3. **`tests/e2e/game-flow.spec.js`**
+   - Nuevo test: "debe finalizar automáticamente si solo queda 1 jugador bajo el límite"
+   - Nuevo test: "debe permitir reenganche si quedan 2 o más jugadores bajo el límite"
+
+4. **`README.md`**
+   - Actualizada sección "Funcionalidades Principales"
+   - Actualizada sección "Cómo Jugar" con nueva lógica
+   - Actualizado checklist de funcionalidades
+
+### 📊 Tests
+
+**Tests Unitarios:** 32 tests (+3 nuevos)
+- ✅ Nuevo: "debe finalizar el juego si solo queda 1 jugador bajo el límite (2 jugadores)"
+- ✅ Nuevo: "debe finalizar el juego si solo queda 1 jugador bajo el límite (4 jugadores)"
+- ✅ Nuevo: "debe permitir reenganche si quedan 2 o más jugadores bajo el límite"
+
+**Tests E2E:** 20 tests (+2 nuevos)
+- ✅ Nuevo: "debe finalizar automáticamente si solo queda 1 jugador bajo el límite"
+- ✅ Nuevo: "debe permitir reenganche si quedan 2 o más jugadores bajo el límite"
+
+### 💡 Mejoras de Gameplay
+
+1. **Más justo**: Evita situaciones donde todos los jugadores se pueden reenganchar indefinidamente
+2. **Más rápido**: El juego termina automáticamente cuando hay un claro ganador
+3. **Mejor UX**: No confunde al jugador mostrando opciones de reenganche cuando no tiene sentido
+4. **Lógica clara**: Si solo queda uno en pie, ese es el ganador
+
+---
+
 ## [1.3.0] - 2025-10-06
 
 ### ✨ Cambios Implementados

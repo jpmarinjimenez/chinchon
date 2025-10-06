@@ -25,9 +25,10 @@ Aplicación web completa para anotar los puntos del juego de cartas **Chinchón*
 - ✅ **Jugada especial (-10 puntos)**: Checkbox para marcar -10 (solo uno por ronda), con resaltado visual y sonoro
 - ✅ **Chinchón**: Botón especial que termina la partida inmediatamente y ese jugador gana
 - ✅ **Sistema de reenganche**: Cuando un jugador alcanza el límite, puede reengancharse con los puntos del jugador que esté más cerca del límite sin alcanzarlo
+- ✅ **Victoria automática**: Si solo queda un jugador por debajo del límite, gana automáticamente sin opción de reenganche para los demás
 - ✅ **Múltiples reenganches**: Un jugador puede reengancharse varias veces
 - ✅ **Eliminación visual**: Los jugadores eliminados se marcan pero no se borran
-- ✅ **Final de juego**: Termina cuando solo queda un jugador activo
+- ✅ **Final de juego**: Termina cuando solo queda un jugador activo o cuando solo uno está bajo el límite
 - ✅ **Persistencia**: Estado guardado automáticamente en localStorage
 - ✅ **Historial de partidas**: Guarda las últimas 20 partidas
 - ✅ **Deshacer ronda**: Permite revertir la última ronda jugada
@@ -298,9 +299,10 @@ chinchon-scorekeeper/
 - [x] Detectar cuando un jugador alcanza el límite
 - [x] Preguntar si quiere reengancharse
 - [x] Reenganchar con puntos del jugador que esté más cerca del límite sin alcanzarlo
+- [x] Victoria automática si solo queda 1 jugador bajo el límite
 - [x] Permitir múltiples reenganches
 - [x] Marcar jugadores eliminados visualmente
-- [x] Finalizar juego cuando solo queda 1 jugador
+- [x] Finalizar juego cuando solo queda 1 jugador activo o bajo el límite
 - [x] Guardar en localStorage
 - [x] Cargar partidas previas
 - [x] Deshacer última ronda
@@ -342,10 +344,10 @@ chinchon-scorekeeper/
    - **Botón "🏆 Chinchón"**: Si un jugador hace chinchón, pulsa este botón. La partida termina inmediatamente y ese jugador gana
    - **Puntos normales**: Introduce 0 o más puntos para los demás jugadores
    - **Totales negativos**: Los totales pueden ser negativos
-3. **Límite alcanzado**: Si un jugador alcanza el límite, decide si:
-   - **Reenganchar**: Continúa con los puntos del jugador que esté más cerca del límite sin alcanzarlo
-   - **Eliminar**: Sale del juego
-4. **Final**: El juego termina cuando solo queda un jugador activo
+3. **Límite alcanzado**: 
+   - Si **2 o más jugadores** quedan bajo el límite: Los que alcanzaron el límite pueden reengancharse o ser eliminados
+   - Si **solo 1 jugador** queda bajo el límite: Ese jugador **gana automáticamente** (sin reenganche para los demás)
+4. **Final**: El juego termina cuando solo queda un jugador activo o cuando solo uno está bajo el límite
 5. **Ganador**: El jugador con menos puntos gana
 
 ## 📝 Notas Adicionales

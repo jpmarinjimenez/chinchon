@@ -210,6 +210,88 @@ describe('GameStore', () => {
     })
   })
 
+  describe('Victoria automática cuando solo queda un jugador bajo el límite', () => {
+    it('debe finalizar el juego si solo queda 1 jugador bajo el límite (2 jugadores)', () => {
+      const store = useGameStore()
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno'])
+      
+      const [ana, bruno] = store.jugadores
+      
+      // Ana llega al límite, Bruno está por debajo
+      const jugadoresAlLimite = store.finalizarRonda({ [ana.id]: 105, [bruno.id]: 50 })
+      
+      // No debe retornar jugadores para reenganche
+      expect(jugadoresAlLimite).toHaveLength(0)
+      
+      // Ana debe estar eliminada
+      expect(ana.eliminado).toBe(true)
+      
+      // Bruno debe seguir activo
+      expect(bruno.eliminado).toBe(false)
+      
+      // El juego debe haber finalizado
+      expect(store.juegoFinalizado).toBe(true)
+      expect(store.juegoActivo).toBe(false)
+      
+      // Bruno debe ser el ganador
+      expect(store.ganador.id).toBe(bruno.id)
+    })
+
+    it('debe finalizar el juego si solo queda 1 jugador bajo el límite (4 jugadores)', () => {
+      const store = useGameStore()
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno', 'Carlos', 'Diana'])
+      
+      const [ana, bruno, carlos, diana] = store.jugadores
+      
+      // 3 jugadores alcanzan el límite, 1 queda por debajo
+      const jugadoresAlLimite = store.finalizarRonda({ 
+        [ana.id]: 110, 
+        [bruno.id]: 105, 
+        [carlos.id]: 102, 
+        [diana.id]: 70 
+      })
+      
+      // No debe retornar jugadores para reenganche
+      expect(jugadoresAlLimite).toHaveLength(0)
+      
+      // Los 3 jugadores que alcanzaron el límite deben estar eliminados
+      expect(ana.eliminado).toBe(true)
+      expect(bruno.eliminado).toBe(true)
+      expect(carlos.eliminado).toBe(true)
+      
+      // Diana debe seguir activa
+      expect(diana.eliminado).toBe(false)
+      
+      // El juego debe haber finalizado
+      expect(store.juegoFinalizado).toBe(true)
+      
+      // Diana debe ser la ganadora
+      expect(store.ganador.id).toBe(diana.id)
+    })
+
+    it('debe permitir reenganche si quedan 2 o más jugadores bajo el límite', () => {
+      const store = useGameStore()
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno', 'Carlos'])
+      
+      const [ana, bruno, carlos] = store.jugadores
+      
+      // Solo Ana alcanza el límite, quedan 2 jugadores bajo el límite
+      const jugadoresAlLimite = store.finalizarRonda({ 
+        [ana.id]: 105, 
+        [bruno.id]: 60, 
+        [carlos.id]: 50 
+      })
+      
+      // Debe retornar jugadores para reenganche
+      expect(jugadoresAlLimite).toHaveLength(1)
+      expect(jugadoresAlLimite[0].id).toBe(ana.id)
+      
+      // El juego NO debe haber finalizado
+      expect(store.juegoFinalizado).toBe(false)
+      expect(store.juegoActivo).toBe(true)
+    })
+  })
+
   describe('Deshacer última ronda', () => {
     it('debe revertir puntos de la última ronda', () => {
       const store = useGameStore()

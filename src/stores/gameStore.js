@@ -140,6 +140,27 @@ export const useGameStore = defineStore('game', {
       // Guardar la ronda
       this.rondas.push(nuevaRonda)
       
+      // Verificar cuántos jugadores quedan por debajo del límite
+      const jugadoresBajoLimite = this.jugadores.filter(
+        j => !j.eliminado && j.puntosAcumulados < this.limiteEliminacion
+      )
+
+      // Si solo queda 1 jugador por debajo del límite, ese es el ganador
+      if (jugadoresBajoLimite.length === 1 && jugadoresQueLlegaronAlLimite.length > 0) {
+        // Eliminar a todos los jugadores que alcanzaron el límite
+        jugadoresQueLlegaronAlLimite.forEach(jugador => {
+          jugador.eliminado = true
+        })
+        
+        // Finalizar el juego automáticamente
+        this.finalizarJuego()
+        
+        this.guardarEnLocalStorage()
+        
+        // Retornar array vacío para que no se muestre el modal de reenganche
+        return []
+      }
+      
       this.guardarEnLocalStorage()
       
       return jugadoresQueLlegaronAlLimite

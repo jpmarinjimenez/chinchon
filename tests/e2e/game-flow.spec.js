@@ -274,6 +274,41 @@ describe('Flujo completo del juego Chinchón', () => {
     cy.contains('Ganador: Carlos').should('be.visible')
   })
 
+  it('debe finalizar automáticamente si solo queda 1 jugador bajo el límite', () => {
+    // Crear partida con 4 jugadores
+    crearPartida(['Ana', 'Bruno', 'Carlos', 'Diana'], 100)
+
+    // Llevar a 3 jugadores al límite y dejar a 1 por debajo
+    cy.contains('Finalizar Ronda').click()
+    cy.get('input[type="number"]').eq(0).clear().type('105') // Ana
+    cy.get('input[type="number"]').eq(1).clear().type('110') // Bruno
+    cy.get('input[type="number"]').eq(2).clear().type('102') // Carlos
+    cy.get('input[type="number"]').eq(3).clear().type('70')  // Diana
+    cy.contains('Confirmar Ronda').click()
+
+    // NO debe aparecer el modal de reenganche
+    cy.contains('Reenganche').should('not.exist')
+
+    // El juego debe haber finalizado automáticamente
+    cy.contains('Partida Finalizada').should('be.visible')
+    cy.contains('Ganador: Diana').should('be.visible')
+  })
+
+  it('debe permitir reenganche si quedan 2 o más jugadores bajo el límite', () => {
+    // Crear partida con 3 jugadores
+    crearPartida(['Ana', 'Bruno', 'Carlos'], 100)
+
+    // Solo 1 jugador alcanza el límite
+    cy.contains('Finalizar Ronda').click()
+    cy.get('input[type="number"]').eq(0).clear().type('105') // Ana
+    cy.get('input[type="number"]').eq(1).clear().type('60')  // Bruno
+    cy.get('input[type="number"]').eq(2).clear().type('50')  // Carlos
+    cy.contains('Confirmar Ronda').click()
+
+    // SÍ debe aparecer el modal de reenganche (quedan 2 jugadores bajo el límite)
+    cy.contains('Reenganche').should('be.visible')
+  })
+
   it('debe poder iniciar una nueva partida desde el juego finalizado', () => {
     // Crear y finalizar partida
     crearPartida(['Ana', 'Bruno'], 50)
