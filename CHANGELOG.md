@@ -68,7 +68,13 @@ Chinchón (victoria automática):
    - Test renombrado: "debe permitir solo un -10 por ronda"
    - Actualizado: Icono 🎉 → ✨
 
-5. **`README.md`**
+5. **`src/views/HistoryView.vue`**
+   - Nueva función: `esGanadorPorChinchon(partida)`
+   - Badge "🎉 CHINCHÓN" con animación pulse en lista
+   - Indicador "Victoria automática" en detalles
+   - Badge también en modal de detalle de partida
+
+6. **`README.md`**
    - Documentación clara de la diferencia entre -10 y Chinchón
    - Sección "Cómo Jugar" actualizada
    - Checklist actualizado con ambas funcionalidades

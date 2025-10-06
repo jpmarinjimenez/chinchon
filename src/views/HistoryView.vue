@@ -24,12 +24,26 @@
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2">
                 <span class="text-2xl">🏆</span>
-                <div>
-                  <h3 class="text-xl font-semibold text-gray-800">
-                    Ganador: {{ partida.ganador }}
-                  </h3>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                      Ganador: {{ partida.ganador }}
+                    </h3>
+                    <span
+                      v-if="esGanadorPorChinchon(partida)"
+                      class="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-full text-xs animate-pulse"
+                    >
+                      🎉 CHINCHÓN
+                    </span>
+                  </div>
                   <p class="text-sm text-gray-500">
                     {{ formatearFecha(partida.fecha) }}
+                  </p>
+                  <p
+                    v-if="esGanadorPorChinchon(partida)"
+                    class="text-xs text-orange-600 font-semibold mt-1"
+                  >
+                    Victoria automática
                   </p>
                 </div>
               </div>
@@ -120,9 +134,17 @@
             <p class="text-gray-600">
               <span class="font-semibold">Fecha:</span> {{ formatearFecha(partidaSeleccionada.fecha) }}
             </p>
-            <p class="text-gray-600">
-              <span class="font-semibold">Ganador:</span> {{ partidaSeleccionada.ganador }}
-            </p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <p class="text-gray-600">
+                <span class="font-semibold">Ganador:</span> {{ partidaSeleccionada.ganador }}
+              </p>
+              <span
+                v-if="esGanadorPorChinchon(partidaSeleccionada)"
+                class="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-full text-xs"
+              >
+                🎉 CHINCHÓN - Victoria automática
+              </span>
+            </div>
           </div>
 
           <!-- Tabla de puntuaciones -->
@@ -229,6 +251,12 @@ export default {
       router.push('/')
     }
 
+    const esGanadorPorChinchon = (partida) => {
+      // Buscar si algún jugador tiene chinchon: true
+      const ganadorChinchon = partida.jugadores.find(j => j.chinchon === true)
+      return !!ganadorChinchon
+    }
+
     return {
       gameStore,
       partidaSeleccionada,
@@ -237,7 +265,8 @@ export default {
       verDetallePartida,
       cerrarDetalle,
       eliminarPartida,
-      volverInicio
+      volverInicio,
+      esGanadorPorChinchon
     }
   }
 }
