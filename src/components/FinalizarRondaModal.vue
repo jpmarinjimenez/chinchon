@@ -20,69 +20,73 @@
                     <!-- Body -->
                     <div class="p-6">
                         <form @submit.prevent="confirmar">
-                            <div class="space-y-4 max-h-[60vh] overflow-y-auto">
+                            <div class="space-y-3 max-h-[60vh] overflow-y-auto">
                                 <div
                                     v-for="jugador in jugadores"
                                     :key="jugador.id"
-                                    class="flex items-center gap-4 p-4 rounded-lg border-2 transition-all"
+                                    class="p-4 rounded-lg border-2 transition-all"
                                     :class="{
                                         'border-green-400 bg-green-50': hizoMenos10[jugador.id],
                                         'border-gray-200 bg-white': !hizoMenos10[jugador.id],
                                     }">
                                     <!-- Nombre del jugador -->
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-gray-800">{{ jugador.nombre }}</p>
+                                    <div class="mb-3">
+                                        <p class="font-semibold text-gray-800 text-lg">{{ jugador.nombre }}</p>
                                         <p class="text-sm text-gray-500">
                                             Total actual: {{ jugador.puntosAcumulados }} pts
                                         </p>
                                     </div>
 
-                                    <!-- Input de puntos -->
-                                    <div class="w-32">
-                                        <input
-                                            v-model.number="puntosRonda[jugador.id]"
-                                            type="number"
-                                            min="0"
-                                            max="999"
-                                            step="1"
-                                            class="input-field text-center text-lg font-semibold"
-                                            :class="{
-                                                'bg-green-100 border-green-400': hizoMenos10[jugador.id],
-                                                'bg-gray-100': hizoMenos10[jugador.id],
-                                            }"
-                                            placeholder="0"
-                                            required
-                                            :disabled="hizoMenos10[jugador.id]"
-                                            :aria-label="`Puntos para ${jugador.nombre}`"
-                                            ref="inputPuntos" />
+                                    <!-- Controles: Layout responsive -->
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                                        <!-- Input de puntos -->
+                                        <div class="flex-1 sm:flex-none sm:w-32">
+                                            <label class="block text-xs text-gray-600 mb-1 sm:hidden">Puntos:</label>
+                                            <input
+                                                v-model.number="puntosRonda[jugador.id]"
+                                                type="number"
+                                                min="0"
+                                                max="999"
+                                                step="1"
+                                                class="input-field text-center text-2xl sm:text-lg font-semibold w-full"
+                                                :class="{
+                                                    'bg-green-100 border-green-400': hizoMenos10[jugador.id],
+                                                    'bg-gray-100': hizoMenos10[jugador.id],
+                                                }"
+                                                placeholder="0"
+                                                required
+                                                :disabled="hizoMenos10[jugador.id]"
+                                                :aria-label="`Puntos para ${jugador.nombre}`"
+                                                ref="inputPuntos" />
+                                        </div>
+
+                                        <!-- Controles adicionales -->
+                                        <div class="flex items-center gap-3 justify-between sm:justify-start">
+                                            <!-- Checkbox de -10 -->
+                                            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200">
+                                                <input
+                                                    :id="`menos10-${jugador.id}`"
+                                                    v-model="hizoMenos10[jugador.id]"
+                                                    type="checkbox"
+                                                    class="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
+                                                    :aria-label="`${jugador.nombre} hizo -10`"
+                                                    @change="manejarMenos10(jugador.id)" />
+                                                <label
+                                                    :for="`menos10-${jugador.id}`"
+                                                    class="text-sm font-semibold text-gray-700 cursor-pointer select-none whitespace-nowrap">
+                                                    -10 ✨
+                                                </label>
+                                            </div>
+
+                                            <!-- Botón Chinchón -->
+                                            <button
+                                                type="button"
+                                                @click="confirmarChinchon(jugador)"
+                                                class="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all transform hover:scale-105 shadow-md text-sm whitespace-nowrap">
+                                                🏆 Chinchón
+                                            </button>
+                                        </div>
                                     </div>
-
-                                    <!-- Checkbox de -10 -->
-                                    <div class="flex items-center gap-2">
-                                        <input
-                                            :id="`menos10-${jugador.id}`"
-                                            v-model="hizoMenos10[jugador.id]"
-                                            type="checkbox"
-                                            class="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
-                                            :aria-label="`${jugador.nombre} hizo -10`"
-                                            @change="manejarMenos10(jugador.id)" />
-                                        <label
-                                            :for="`menos10-${jugador.id}`"
-                                            class="text-sm font-medium text-gray-700 cursor-pointer select-none">
-                                            -10
-                                        </label>
-                                    </div>
-
-                                    <!-- Indicador de -10 -->
-                                    <div v-if="hizoMenos10[jugador.id]" class="text-2xl animate-bounce-slow">✨</div>
-
-                                    <!-- Botón Chinchón -->
-                                    <button
-                                        type="button"
-                                        @click="confirmarChinchon(jugador)"
-                                        class="px-3 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all transform hover:scale-105 shadow-md text-xs">
-                                        🏆 Chinchón
-                                    </button>
                                 </div>
                             </div>
 
