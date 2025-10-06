@@ -48,6 +48,17 @@
       <div class="text-center mt-8 text-gray-500 text-sm">
         <p>Aplicación web para anotar puntos del juego Chinchón</p>
         <p class="mt-1">Desarrollado con Vue 3 + Pinia + Tailwind CSS</p>
+        <p class="mt-2">
+          Creado por 
+          <a 
+            href="https://jpmarin.dev" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
+          >
+            Juan Pablo Marín Jiménez
+          </a>
+        </p>
       </div>
     </div>
   </div>
