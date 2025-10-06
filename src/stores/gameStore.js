@@ -91,6 +91,7 @@ export const useGameStore = defineStore('game', {
         puntosAcumulados: 0,
         eliminado: false,
         vecesReenganchado: 0,
+        chinchon: false, // Indica si ganó por chinchón
         historialPuntos: [] // Historial de puntos por ronda
       }))
       this.rondas = []
@@ -246,6 +247,34 @@ export const useGameStore = defineStore('game', {
      * Finaliza el juego actual
      */
     finalizarJuego() {
+      this.juegoActivo = false
+      this.juegoFinalizado = true
+      
+      // Guardar en el historial
+      this.guardarEnHistorial()
+      
+      this.guardarEnLocalStorage()
+    },
+
+    /**
+     * Finaliza el juego por chinchón (gana automáticamente el jugador)
+     * @param {string} jugadorId - ID del jugador que hizo chinchón
+     */
+    finalizarJuegoPorChinchon(jugadorId) {
+      const jugador = this.jugadores.find(j => j.id === jugadorId)
+      if (!jugador) return
+
+      // Marcar al jugador como ganador por chinchón
+      jugador.chinchon = true
+      
+      // Eliminar a todos los demás jugadores
+      this.jugadores.forEach(j => {
+        if (j.id !== jugadorId) {
+          j.eliminado = true
+        }
+      })
+
+      // Finalizar el juego
       this.juegoActivo = false
       this.juegoFinalizado = true
       

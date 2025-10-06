@@ -56,27 +56,46 @@ describe('Flujo completo del juego Chinchón', () => {
     cy.contains('Ronda 2').should('be.visible')
   })
 
-  it('debe manejar un chinchón (-10 puntos)', () => {
+  it('debe manejar un -10 puntos (jugada especial)', () => {
     // Crear partida
     crearPartida(['Ana', 'Bruno'], 100)
 
-    // Finalizar ronda con chinchón
+    // Finalizar ronda con -10
     cy.contains('Finalizar Ronda').click()
     
-    // Marcar checkbox de chinchón para Ana
+    // Marcar checkbox de -10 para Ana
     cy.get('input[type="checkbox"]').eq(0).check()
     
     // Introducir puntos para Bruno
     cy.get('input[type="number"]').eq(1).clear().type('25')
 
-    // Verificar resaltado visual del chinchón
+    // Verificar resaltado visual del -10
     cy.get('input[type="number"]').eq(0).should('have.class', 'bg-green-100')
-    cy.get('div').contains('🎉').should('exist')
+    cy.get('div').contains('✨').should('exist')
 
     cy.contains('Confirmar Ronda').click()
 
     // Verificar que la ronda se registró
     cy.contains('Ronda 2').should('be.visible')
+  })
+
+  it('debe finalizar la partida con chinchón', () => {
+    // Crear partida
+    crearPartida(['Ana', 'Bruno', 'Carlos'], 100)
+
+    // Abrir modal de finalizar ronda
+    cy.contains('Finalizar Ronda').click()
+
+    // Hacer clic en el botón de Chinchón para Ana
+    cy.contains('🏆 Chinchón').first().click()
+
+    // Confirmar en el diálogo nativo
+    // Nota: Cypress acepta automáticamente los confirms
+    
+    // Verificar que el juego terminó
+    cy.contains('¡Partida Finalizada!').should('be.visible')
+    cy.contains('¡CHINCHÓN!').should('be.visible')
+    cy.contains('Ganador: Ana').should('be.visible')
   })
 
   it('debe mostrar modal de reenganche cuando un jugador alcanza el límite', () => {
@@ -194,23 +213,23 @@ describe('Flujo completo del juego Chinchón', () => {
     cy.contains('Ganador').should('be.visible')
   })
 
-  it('debe permitir solo un chinchón por ronda', () => {
+  it('debe permitir solo un -10 por ronda', () => {
     // Crear partida
     crearPartida(['Ana', 'Bruno', 'Carlos'], 100)
 
     // Abrir modal
     cy.contains('Finalizar Ronda').click()
 
-    // Marcar checkbox de chinchón para Ana
+    // Marcar checkbox de -10 para Ana
     cy.get('input[type="checkbox"]').eq(0).check()
     cy.get('input[type="checkbox"]').eq(0).should('be.checked')
 
-    // Marcar checkbox de chinchón para Bruno (debería desmarcar el de Ana)
+    // Marcar checkbox de -10 para Bruno (debería desmarcar el de Ana)
     cy.get('input[type="checkbox"]').eq(1).check()
     cy.get('input[type="checkbox"]').eq(1).should('be.checked')
     cy.get('input[type="checkbox"]').eq(0).should('not.be.checked')
 
-    // Solo Bruno debe tener chinchón
+    // Solo Bruno debe tener -10
     cy.get('input[type="checkbox"]').eq(1).should('be.checked')
   })
 

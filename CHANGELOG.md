@@ -1,5 +1,101 @@
 # Changelog
 
+## [1.3.0] - 2025-10-06
+
+### ✨ Cambios Implementados
+
+#### Separación de Conceptos: -10 vs Chinchón
+
+**IMPORTANTE: Corrección de concepto**
+
+**Antes:**
+- Se usaba el término "Chinchón" para referirse a la jugada de -10 puntos
+- No existía el concepto real de Chinchón (victoria automática)
+
+**Ahora:**
+- ✅ **-10 puntos**: Jugada especial que resta 10 puntos. Checkbox en el modal
+- ✅ **Chinchón**: Victoria automática. Botón especial "🏆 Chinchón" que termina la partida inmediatamente
+- ✅ Confirmación de seguridad antes de declarar chinchón
+- ✅ Indicador visual "¡CHINCHÓN! 🎉" en el resumen final
+- ✅ El ganador tiene propiedad `chinchon: true` en el store
+
+**Diferencias clave:**
+```
+-10 puntos (jugada especial):
+  - Checkbox en modal
+  - Resta 10 puntos
+  - La partida continúa
+  - Solo un jugador por ronda
+  - Icono: ✨
+
+Chinchón (victoria automática):
+  - Botón "🏆 Chinchón"
+  - Termina la partida
+  - Ese jugador gana automáticamente
+  - No se puede deshacer
+  - Confirmación requerida
+  - Icono: 🏆
+```
+
+### 🔧 Archivos Modificados
+
+1. **`src/components/FinalizarRondaModal.vue`**
+   - Renombrado: `hizoChinchon` → `hizoMenos10`
+   - Renombrado: `manejarChinchon()` → `manejarMenos10()`
+   - Nueva función: `confirmarChinchon(jugador)`
+   - Nuevo botón: "🏆 Chinchón" para cada jugador
+   - Checkbox ahora se llama "-10 (especial)"
+   - Icono cambiado: 🎉 → ✨ para -10
+   - Nuevo emit: `'chinchon'`
+   - Confirmación con `confirm()` nativo
+
+2. **`src/views/GameView.vue`**
+   - Nueva función: `manejarChinchon(jugadorId)`
+   - Llama a `gameStore.finalizarJuegoPorChinchon()`
+   - Resumen final actualizado con indicador de chinchón
+   - Muestra "¡CHINCHÓN! 🎉" si `ganador.chinchon === true`
+
+3. **`src/stores/gameStore.js`**
+   - Nueva acción: `finalizarJuegoPorChinchon(jugadorId)`
+   - Nueva propiedad en jugadores: `chinchon: false`
+   - Marca `chinchon: true` al ganador
+   - Elimina a todos los demás jugadores
+   - Finaliza la partida inmediatamente
+
+4. **`tests/e2e/game-flow.spec.js`**
+   - Test renombrado: "debe manejar un -10 puntos (jugada especial)"
+   - Nuevo test: "debe finalizar la partida con chinchón"
+   - Test renombrado: "debe permitir solo un -10 por ronda"
+   - Actualizado: Icono 🎉 → ✨
+
+5. **`README.md`**
+   - Documentación clara de la diferencia entre -10 y Chinchón
+   - Sección "Cómo Jugar" actualizada
+   - Checklist actualizado con ambas funcionalidades
+
+### 📊 Tests
+
+**Tests E2E:** 18 tests
+- ✅ Renombrado: "debe manejar un -10 puntos (jugada especial)"
+- ✅ Nuevo: "debe finalizar la partida con chinchón"
+- ✅ Renombrado: "debe permitir solo un -10 por ronda"
+
+### 💡 Flujo de Usuario Actualizado
+
+**Para -10 puntos:**
+1. Finalizar Ronda → Marcar checkbox "-10" → Confirmar
+2. Se restan 10 puntos del total
+3. La partida continúa normalmente
+
+**Para Chinchón:**
+1. Finalizar Ronda → Botón "🏆 Chinchón"
+2. Confirmación: "¿Estás seguro?"
+3. Partida termina inmediatamente
+4. Ese jugador es declarado ganador
+5. Resumen muestra "¡CHINCHÓN! 🎉"
+
+---
+
 ## [1.2.0] - 2025-10-06
 
 ### ✨ Cambios Implementados

@@ -16,7 +16,11 @@
         <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-2xl shadow-2xl p-8 text-center">
           <div class="text-6xl mb-4">🏆</div>
           <h2 class="text-3xl font-bold mb-2">¡Partida Finalizada!</h2>
+          <p v-if="gameStore.ganador?.chinchon" class="text-2xl mb-2 font-bold animate-pulse">
+            ¡CHINCHÓN! 🎉
+          </p>
           <p class="text-xl mb-4">Ganador: <span class="font-bold">{{ gameStore.ganador?.nombre }}</span></p>
+          <p v-if="gameStore.ganador?.chinchon" class="text-sm opacity-90">Victoria automática por Chinchón</p>
           <div class="flex gap-4 justify-center mt-6">
             <button @click="verHistorial" class="btn-secondary bg-white text-orange-600 hover:bg-gray-100">
               Ver Historial
@@ -126,6 +130,7 @@
       v-if="mostrarModalFinalizar"
       :jugadores="gameStore.jugadoresActivos"
       @confirmar="finalizarRonda"
+      @chinchon="manejarChinchon"
       @cerrar="cerrarModalFinalizarRonda"
     />
 
@@ -257,6 +262,12 @@ export default {
       }
     }
 
+    const manejarChinchon = (jugadorId) => {
+      // Chinchón: termina la partida inmediatamente
+      gameStore.finalizarJuegoPorChinchon(jugadorId)
+      cerrarModalFinalizarRonda()
+    }
+
     return {
       gameStore,
       mostrarModalFinalizar,
@@ -266,6 +277,7 @@ export default {
       abrirModalFinalizarRonda,
       cerrarModalFinalizarRonda,
       finalizarRonda,
+      manejarChinchon,
       cerrarModalReenganche,
       reengancharJugador,
       eliminarJugador,

@@ -22,7 +22,8 @@ Aplicación web completa para anotar los puntos del juego de cartas **Chinchón*
 - ✅ **2-8 jugadores**: Soporte para partidas de 2 hasta 8 jugadores
 - ✅ **Tabla de puntuación**: Vista por columnas (desktop) o tarjetas (móvil)
 - ✅ **Finalizar rondas**: Modal para introducir puntos de cada jugador
-- ✅ **Chinchón (-10 puntos)**: Checkbox para marcar chinchón (solo uno por ronda), con resaltado visual y sonoro
+- ✅ **Jugada especial (-10 puntos)**: Checkbox para marcar -10 (solo uno por ronda), con resaltado visual y sonoro
+- ✅ **Chinchón**: Botón especial que termina la partida inmediatamente y ese jugador gana
 - ✅ **Sistema de reenganche**: Cuando un jugador alcanza el límite, puede reengancharse con los puntos del jugador que esté más cerca del límite sin alcanzarlo
 - ✅ **Múltiples reenganches**: Un jugador puede reengancharse varias veces
 - ✅ **Eliminación visual**: Los jugadores eliminados se marcan pero no se borran
@@ -288,8 +289,10 @@ chinchon-scorekeeper/
 - [x] Pedir nombres de jugadores (máximo 8)
 - [x] Mostrar columna por jugador con rondas y total
 - [x] Botón "Finalizar ronda" con modal
-- [x] Checkbox para marcar chinchón (-10 puntos) con resaltado visual
-- [x] Solo un jugador puede hacer chinchón por ronda
+- [x] Checkbox para marcar jugada especial (-10 puntos) con resaltado visual
+- [x] Solo un jugador puede hacer -10 por ronda
+- [x] Botón de Chinchón que termina la partida inmediatamente
+- [x] Confirmación de seguridad antes de declarar chinchón
 - [x] Los totales pueden ser negativos
 - [x] Sumar puntos al total y guardar en historial
 - [x] Detectar cuando un jugador alcanza el límite
@@ -334,8 +337,9 @@ chinchon-scorekeeper/
 
 1. **Inicio**: Define el límite de puntos (ej: 100) y los nombres de los jugadores
 2. **Rondas**: Después de cada ronda, haz clic en "Finalizar Ronda" e introduce los puntos:
-   - **Checkbox "Chinchón"**: Marca el checkbox si el jugador hizo chinchón (-10 puntos)
-   - **Solo un chinchón por ronda**: Solo un jugador puede marcar el checkbox
+   - **Checkbox "-10"**: Marca el checkbox si el jugador hizo una jugada especial de -10 puntos
+   - **Solo un -10 por ronda**: Solo un jugador puede marcar el checkbox
+   - **Botón "🏆 Chinchón"**: Si un jugador hace chinchón, pulsa este botón. La partida termina inmediatamente y ese jugador gana
    - **Puntos normales**: Introduce 0 o más puntos para los demás jugadores
    - **Totales negativos**: Los totales pueden ser negativos
 3. **Límite alcanzado**: Si un jugador alcanza el límite, decide si:
