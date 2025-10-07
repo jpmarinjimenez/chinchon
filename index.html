@@ -134,14 +134,16 @@
         <div id="app"></div>
         <script type="module" src="/src/main.js"></script>
 
-        <!-- Google Analytics (Configurar después de crear propiedad) -->
-        <!-- Descomentar y añadir tu ID de medición:
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-605XJWGCGS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-605XJWGCGS');
-    </script>
-    --></body>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-605XJWGCGS"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+
+            gtag('config', 'G-605XJWGCGS');
+        </script>
+    </body>
 </html>
