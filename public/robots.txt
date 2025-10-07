@@ -1,0 +1,23 @@
+# Permitir acceso a todos los crawlers
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://chinchon.jpmarin.dev/sitemap.xml
+
+# Crawl-delay para bots principales
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: Bingbot
+Crawl-delay: 0
+
+# Bloquear crawlers indeseados
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

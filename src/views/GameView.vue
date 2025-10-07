@@ -151,6 +151,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
+import { useSeo } from '@/composables/useSeo'
 import HeaderBar from '@/components/HeaderBar.vue'
 import PlayerCard from '@/components/PlayerCard.vue'
 import RoundsList from '@/components/RoundsList.vue'
@@ -169,6 +170,13 @@ export default {
   setup() {
     const router = useRouter()
     const gameStore = useGameStore()
+
+    // SEO para página de juego
+    useSeo({
+      title: 'Jugar Chinchón Online',
+      description: 'Lleva la puntuación de tu partida de Chinchón online. Contador automático para 2-8 jugadores con sistema de reenganche y guardado automático.',
+      canonical: 'https://chinchon.jpmarin.dev/juego'
+    })
 
     // Redirigir si no hay juego activo
     if (!gameStore.juegoActivo && gameStore.jugadores.length === 0) {

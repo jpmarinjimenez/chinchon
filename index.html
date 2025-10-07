@@ -1,13 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinchón - Contador de Puntos</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+
+        <!-- SEO Básico -->
+        <title>Contador de Puntos Chinchón Online Gratis | App para Juego de Cartas</title>
+        <meta
+            name="description"
+            content="Contador de puntos gratuito para el juego de cartas Chinchón. Lleva la puntuación de 2-8 jugadores online desde tu móvil o ordenador. Sin instalación, 100% gratis." />
+        <meta
+            name="keywords"
+            content="contador chinchón, chinchón puntos online, app chinchón gratis, chinchón score keeper, chinchón marcador, marcador de cartas chinchón, chinchón juego de cartas puntuación, app para contar puntos chinchón, chinchón online, contador puntos cartas" />
+        <meta name="author" content="Chinchón Score Keeper" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://chinchon.jpmarin.dev/" />
+
+        <!-- Idioma alternativo -->
+        <link rel="alternate" hreflang="es" href="https://chinchon.jpmarin.dev/" />
+        <link rel="alternate" hreflang="es-ES" href="https://chinchon.jpmarin.dev/" />
+        <link rel="alternate" hreflang="es-MX" href="https://chinchon.jpmarin.dev/" />
+        <link rel="alternate" hreflang="es-AR" href="https://chinchon.jpmarin.dev/" />
+
+        <!-- Open Graph (Facebook, LinkedIn) -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Contador de Puntos Chinchón Online Gratis | App para Juego de Cartas" />
+        <meta
+            property="og:description"
+            content="Contador de puntos gratuito para el juego de cartas Chinchón. Lleva la puntuación de 2-8 jugadores online desde tu móvil o ordenador." />
+        <meta property="og:url" content="https://chinchon.jpmarin.dev/" />
+        <meta property="og:image" content="https://chinchon.jpmarin.dev/og-image.jpg" />
+        <meta property="og:image:alt" content="Contador de Puntos Chinchón - App gratuita para juego de cartas" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Chinchón Score Keeper" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contador de Puntos Chinchón Online Gratis" />
+        <meta
+            name="twitter:description"
+            content="Contador de puntos gratuito para el juego de cartas Chinchón. 2-8 jugadores, móvil y desktop." />
+        <meta name="twitter:image" content="https://chinchon.jpmarin.dev/og-image.jpg" />
+        <meta name="twitter:image:alt" content="Contador de Puntos Chinchón" />
+
+        <!-- PWA y Mobile -->
+        <meta name="theme-color" content="#4F46E5" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Chinchón" />
+        <link rel="manifest" href="/manifest.json" />
+
+        <!-- Favicons -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+        <!-- Robots -->
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+
+        <!-- Geo -->
+        <meta name="geo.region" content="ES" />
+        <meta name="geo.placename" content="España" />
+
+        <!-- Preconnect para performance -->
+        <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        <!-- Structured Data (Schema.org JSON-LD) -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "Contador de Puntos Chinchón",
+                "alternateName": "Chinchón Score Keeper",
+                "url": "https://chinchon.jpmarin.dev/",
+                "description": "Aplicación web gratuita para llevar la puntuación del juego de cartas Chinchón. Soporta de 2 a 8 jugadores, con funciones de reenganche, historial y persistencia automática.",
+                "applicationCategory": "GameApplication",
+                "operatingSystem": "Any",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "EUR"
+                },
+                "screenshot": "https://chinchon.jpmarin.dev/screenshot.jpg",
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "5",
+                    "ratingCount": "1"
+                },
+                "browserRequirements": "Requires JavaScript. Requires HTML5.",
+                "softwareVersion": "1.0.0",
+                "author": {
+                    "@type": "Person",
+                    "name": "Juan Pablo Marin"
+                },
+                "inLanguage": "es",
+                "keywords": "contador chinchón, chinchón puntos online, app chinchón gratis, chinchón score keeper, marcador chinchón",
+                "featureList": [
+                    "Soporte para 2-8 jugadores",
+                    "Contador de puntos automático",
+                    "Sistema de reenganche",
+                    "Historial de partidas",
+                    "Guardado automático",
+                    "Responsive móvil y desktop",
+                    "100% gratis"
+                ]
+            }
+        </script>
+
+        <!-- Breadcrumb Schema -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Inicio",
+                        "item": "https://chinchon.jpmarin.dev/"
+                    }
+                ]
+            }
+        </script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="module" src="/src/main.js"></script>
+
+        <!-- Google Analytics (Configurar después de crear propiedad) -->
+        <!-- Descomentar y añadir tu ID de medición:
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-605XJWGCGS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-605XJWGCGS');
+    </script>
+    --></body>
 </html>

@@ -206,12 +206,20 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
+import { useSeo } from '@/composables/useSeo'
 
 export default {
   name: 'HistoryView',
   setup() {
     const router = useRouter()
     const gameStore = useGameStore()
+
+    // SEO para página de historial
+    useSeo({
+      title: 'Historial de Partidas de Chinchón',
+      description: 'Consulta el historial de tus partidas de Chinchón. Revisa las estadísticas, ganadores y puntuaciones de tus partidas anteriores.',
+      canonical: 'https://chinchon.jpmarin.dev/historial'
+    })
     
     // Cargar historial al montar
     gameStore.cargarHistorialDesdeLocalStorage()

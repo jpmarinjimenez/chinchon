@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Página principal -->
+  <url>
+    <loc>https://chinchon.jpmarin.dev/</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://chinchon.jpmarin.dev/"/>
+    <xhtml:link rel="alternate" hreflang="es-ES" href="https://chinchon.jpmarin.dev/"/>
+  </url>
+  
+  <!-- Página de juego -->
+  <url>
+    <loc>https://chinchon.jpmarin.dev/juego</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Página de historial -->
+  <url>
+    <loc>https://chinchon.jpmarin.dev/historial</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+</urlset>
