@@ -12,6 +12,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    environment: 'happy-dom'
+    environment: 'happy-dom',
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.e2e.spec.js']
   }
 })

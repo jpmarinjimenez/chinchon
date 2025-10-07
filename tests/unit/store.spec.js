@@ -70,12 +70,13 @@ describe('GameStore', () => {
 
     it('debe detectar jugadores que alcanzan el límite', () => {
       const store = useGameStore()
-      store.iniciarNuevoJuego(100, ['Ana', 'Bruno'])
+      store.iniciarNuevoJuego(100, ['Ana', 'Bruno', 'Carlos'])
       
-      const [ana, bruno] = store.jugadores
+      const [ana, bruno, carlos] = store.jugadores
       const puntosRonda = {
         [ana.id]: 105,
-        [bruno.id]: 20
+        [bruno.id]: 20,
+        [carlos.id]: 30
       }
       
       const jugadoresAlLimite = store.finalizarRonda(puntosRonda)

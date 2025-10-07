@@ -268,6 +268,9 @@ export const useGameStore = defineStore('game', {
      * Finaliza el juego actual
      */
     finalizarJuego() {
+      // Si el juego ya estaba finalizado, no hacer nada (evitar duplicados en historial)
+      if (this.juegoFinalizado) return
+      
       this.juegoActivo = false
       this.juegoFinalizado = true
       
@@ -284,6 +287,9 @@ export const useGameStore = defineStore('game', {
     finalizarJuegoPorChinchon(jugadorId) {
       const jugador = this.jugadores.find(j => j.id === jugadorId)
       if (!jugador) return
+      
+      // Si el juego ya estaba finalizado, no hacer nada
+      if (this.juegoFinalizado) return
 
       // Marcar al jugador como ganador por chinchón
       jugador.chinchon = true
