@@ -1,23 +1,6 @@
 # robots.txt para Chinchón Score Keeper
 # Permitir acceso completo a todos los crawlers legítimos
 
-# Googlebot (todas las variantes)
-User-agent: Googlebot
-User-agent: Googlebot-Image
-User-agent: Googlebot-News
-User-agent: Googlebot-Video
-User-agent: AdsBot-Google
-User-agent: AdsBot-Google-Mobile
-User-agent: Googlebot-Mobile
-Allow: /
-Crawl-delay: 0
-
-# Bingbot
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 0
-
-# Resto de crawlers legítimos
 User-agent: *
 Allow: /
 
