@@ -1,16 +1,28 @@
-# Permitir acceso a todos los crawlers
+# robots.txt para Chinchón Score Keeper
+# Permitir acceso completo a todos los crawlers legítimos
+
+# Googlebot (todas las variantes)
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Googlebot-News
+User-agent: Googlebot-Video
+User-agent: AdsBot-Google
+User-agent: AdsBot-Google-Mobile
+User-agent: Googlebot-Mobile
+Allow: /
+Crawl-delay: 0
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# Resto de crawlers legítimos
 User-agent: *
 Allow: /
 
 # Sitemap
 Sitemap: https://chinchon.jpmarin.dev/sitemap.xml
-
-# Crawl-delay para bots principales
-User-agent: Googlebot
-Crawl-delay: 0
-
-User-agent: Bingbot
-Crawl-delay: 0
 
 # Bloquear crawlers indeseados
 User-agent: AhrefsBot
@@ -20,4 +32,7 @@ User-agent: SemrushBot
 Disallow: /
 
 User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
 Disallow: /
