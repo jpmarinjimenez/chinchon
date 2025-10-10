@@ -265,6 +265,61 @@ export const useGameStore = defineStore('game', {
     },
 
     /**
+     * Añade un nuevo jugador a la partida en curso
+     * @param {string} nombre - Nombre del nuevo jugador
+     * @returns {Object|null} - El jugador creado o null si hay un error
+     */
+    anadirJugadorAPartida(nombre) {
+      // Validar que no haya más de 8 jugadores
+      if (this.jugadores.length >= 8) {
+        return null
+      }
+
+      const nombreTrim = nombre.trim()
+      
+      // Validar que el nombre no esté vacío
+      if (!nombreTrim) {
+        return null
+      }
+
+      // Validar que no exista ya un jugador con ese nombre
+      const nombreExiste = this.jugadores.some(
+        j => j.nombre.toLowerCase() === nombreTrim.toLowerCase()
+      )
+      
+      if (nombreExiste) {
+        return null
+      }
+
+      // Obtener los puntos del jugador más cercano al límite
+      const jugadorConMasPuntos = this.jugadorConMasPuntosActivo
+      const puntosIniciales = jugadorConMasPuntos ? jugadorConMasPuntos.puntosAcumulados : 0
+
+      // Crear el nuevo jugador
+      const nuevoJugador = {
+        id: `jugador-${Date.now()}-${this.jugadores.length}`,
+        nombre: nombreTrim,
+        puntosAcumulados: puntosIniciales,
+        eliminado: false,
+        vecesReenganchado: 0, // No tiene la marca de reenganchado al entrar
+        chinchon: false,
+        historialPuntos: []
+      }
+
+      // Añadir el jugador al array
+      this.jugadores.push(nuevoJugador)
+
+      // Añadir puntos null en todas las rondas anteriores para este jugador
+      this.rondas.forEach(ronda => {
+        ronda.puntos[nuevoJugador.id] = null
+      })
+
+      this.guardarEnLocalStorage()
+      
+      return nuevoJugador
+    },
+
+    /**
      * Finaliza el juego actual
      */
     finalizarJuego() {

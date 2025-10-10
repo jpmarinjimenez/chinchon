@@ -11,6 +11,17 @@
 
     <!-- Contenido principal -->
     <div class="container mx-auto px-4 py-6">
+      <!-- Botón para añadir jugador -->
+      <div v-if="gameStore.juegoActivo && !gameStore.juegoFinalizado && gameStore.jugadores.length < 8" class="mb-4">
+        <button
+          @click="abrirModalAnadirJugador"
+          class="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+        >
+          <span class="text-xl">➕</span>
+          <span>Añadir Jugador</span>
+        </button>
+      </div>
+
       <!-- Resumen final si el juego terminó -->
       <div v-if="gameStore.juegoFinalizado" class="mb-6">
         <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-2xl shadow-2xl p-8 text-center">
@@ -144,6 +155,15 @@
       @eliminar="eliminarJugador"
       @cerrar="cerrarModalReenganche"
     />
+
+    <!-- Modal Añadir Jugador -->
+    <AnadirJugadorModal
+      v-if="mostrarModalAnadirJugador"
+      :puntos-reenganche="puntosReenganche"
+      :jugadores-existentes="gameStore.jugadores"
+      @confirmar="anadirJugador"
+      @cerrar="cerrarModalAnadirJugador"
+    />
   </div>
 </template>
 
@@ -157,6 +177,7 @@ import PlayerCard from '@/components/PlayerCard.vue'
 import RoundsList from '@/components/RoundsList.vue'
 import FinalizarRondaModal from '@/components/FinalizarRondaModal.vue'
 import ReengancheModal from '@/components/ReengancheModal.vue'
+import AnadirJugadorModal from '@/components/AnadirJugadorModal.vue'
 
 export default {
   name: 'GameView',
@@ -165,7 +186,8 @@ export default {
     PlayerCard,
     RoundsList,
     FinalizarRondaModal,
-    ReengancheModal
+    ReengancheModal,
+    AnadirJugadorModal
   },
   setup() {
     const router = useRouter()
@@ -185,6 +207,7 @@ export default {
 
     const mostrarModalFinalizar = ref(false)
     const mostrarModalReenganche = ref(false)
+    const mostrarModalAnadirJugador = ref(false)
     const jugadoresQueAlcanzaronLimite = ref([])
 
     const puntosReenganche = computed(() => {
@@ -276,10 +299,33 @@ export default {
       cerrarModalFinalizarRonda()
     }
 
+    const abrirModalAnadirJugador = () => {
+      if (!gameStore.juegoFinalizado && gameStore.jugadores.length < 8) {
+        mostrarModalAnadirJugador.value = true
+      }
+    }
+
+    const cerrarModalAnadirJugador = () => {
+      mostrarModalAnadirJugador.value = false
+    }
+
+    const anadirJugador = (nombre) => {
+      const resultado = gameStore.anadirJugadorAPartida(nombre)
+      
+      if (resultado) {
+        // Jugador añadido exitosamente
+        cerrarModalAnadirJugador()
+      } else {
+        // Error al añadir jugador (el modal manejará el error)
+        console.error('No se pudo añadir el jugador')
+      }
+    }
+
     return {
       gameStore,
       mostrarModalFinalizar,
       mostrarModalReenganche,
+      mostrarModalAnadirJugador,
       jugadoresQueAlcanzaronLimite,
       puntosReenganche,
       abrirModalFinalizarRonda,
@@ -292,7 +338,10 @@ export default {
       deshacerRonda,
       volverInicio,
       verHistorial,
-      nuevaPartida
+      nuevaPartida,
+      abrirModalAnadirJugador,
+      cerrarModalAnadirJugador,
+      anadirJugador
     }
   }
 }
