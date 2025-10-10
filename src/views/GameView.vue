@@ -24,12 +24,15 @@
           </p>
           <p class="text-xl mb-4">Ganador: <span class="font-bold">{{ gameStore.ganador?.nombre }}</span></p>
           <p v-if="gameStore.ganador?.chinchon" class="text-sm opacity-90">Victoria automática por Chinchón</p>
-          <div class="flex gap-4 justify-center mt-6">
+          <div class="flex flex-wrap gap-3 justify-center mt-6">
             <button @click="verHistorial" class="btn-secondary bg-white text-orange-600 hover:bg-gray-100">
               Ver Historial
             </button>
             <button @click="nuevaPartida" class="btn-primary bg-orange-600 hover:bg-orange-700">
-              Nueva Partida
+              ♻️ Nueva Partida
+            </button>
+            <button @click="volverAlInicio" class="btn-secondary bg-white text-orange-600 hover:bg-gray-100">
+              🏠 Volver al Inicio
             </button>
           </div>
         </div>
@@ -320,7 +323,18 @@ export default {
     }
 
     const nuevaPartida = () => {
-      if (confirm('¿Iniciar una nueva partida? La actual se guardará en el historial.')) {
+      if (confirm('¿Iniciar una nueva partida con los mismos jugadores? La actual se guardará en el historial.')) {
+        // Guardar los nombres de los jugadores actuales
+        const nombresJugadores = gameStore.jugadores.map(j => j.nombre)
+        const limite = gameStore.limiteEliminacion
+        
+        // Iniciar nueva partida con los mismos jugadores
+        gameStore.iniciarNuevoJuego(limite, nombresJugadores)
+      }
+    }
+
+    const volverAlInicio = () => {
+      if (confirm('¿Volver al inicio? La partida actual se guardará en el historial.')) {
         gameStore.reiniciarJuego()
         router.push('/')
       }
@@ -391,6 +405,7 @@ export default {
       volverInicio,
       verHistorial,
       nuevaPartida,
+      volverAlInicio,
       abrirModalAnadirJugador,
       cerrarModalAnadirJugador,
       anadirJugador,
