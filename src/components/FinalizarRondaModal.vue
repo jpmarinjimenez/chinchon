@@ -45,6 +45,7 @@
                                             <input
                                                 v-model.number="puntosRonda[jugador.id]"
                                                 type="number"
+                                                inputmode="numeric"
                                                 min="0"
                                                 max="999"
                                                 step="1"
@@ -53,7 +54,7 @@
                                                     'bg-green-100 border-green-400': hizoMenos10[jugador.id],
                                                     'bg-gray-100': hizoMenos10[jugador.id],
                                                 }"
-                                                placeholder="0"
+                                                placeholder="Puntos"
                                                 required
                                                 :disabled="hizoMenos10[jugador.id]"
                                                 :aria-label="`Puntos para ${jugador.nombre}`"
@@ -152,7 +153,7 @@ export default {
         // Inicializar puntos y checkboxes para cada jugador
         onMounted(async () => {
             props.jugadores.forEach((jugador) => {
-                puntosRonda.value[jugador.id] = 0;
+                puntosRonda.value[jugador.id] = null;
                 hizoMenos10.value[jugador.id] = false;
             });
 
@@ -166,7 +167,8 @@ export default {
         const formularioValido = computed(() => {
             return props.jugadores.every((jugador) => {
                 const puntos = puntosRonda.value[jugador.id];
-                return puntos !== undefined && puntos !== null && puntos >= 0;
+                // El campo es válido si tiene un valor numérico >= 0 o si hizo -10
+                return hizoMenos10.value[jugador.id] || (puntos !== null && puntos !== undefined && puntos !== '' && puntos >= 0);
             });
         });
 
