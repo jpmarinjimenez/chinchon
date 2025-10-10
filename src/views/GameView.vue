@@ -4,23 +4,15 @@
     <HeaderBar
       :ronda-actual="gameStore.rondaActual"
       :limite="gameStore.limiteEliminacion"
+      :puede-anadir-jugador="puedeAnadirJugador"
       @finalizar-ronda="abrirModalFinalizarRonda"
       @deshacer-ronda="deshacerRonda"
+      @anadir-jugador="abrirModalAnadirJugador"
       @volver-inicio="volverInicio"
     />
 
     <!-- Contenido principal -->
     <div class="container mx-auto px-4 py-6">
-      <!-- Botón para añadir jugador -->
-      <div v-if="gameStore.juegoActivo && !gameStore.juegoFinalizado && gameStore.jugadores.length < 8" class="mb-4">
-        <button
-          @click="abrirModalAnadirJugador"
-          class="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all transform hover:scale-105 flex items-center justify-center gap-2"
-        >
-          <span class="text-xl">➕</span>
-          <span>Añadir Jugador</span>
-        </button>
-      </div>
 
       <!-- Resumen final si el juego terminó -->
       <div v-if="gameStore.juegoFinalizado" class="mb-6">
@@ -215,6 +207,10 @@ export default {
       return jugadorConMasPuntos ? jugadorConMasPuntos.puntosAcumulados : 0
     })
 
+    const puedeAnadirJugador = computed(() => {
+      return gameStore.juegoActivo && !gameStore.juegoFinalizado && gameStore.jugadores.length < 8
+    })
+
     const abrirModalFinalizarRonda = () => {
       if (!gameStore.juegoFinalizado) {
         mostrarModalFinalizar.value = true
@@ -328,6 +324,7 @@ export default {
       mostrarModalAnadirJugador,
       jugadoresQueAlcanzaronLimite,
       puntosReenganche,
+      puedeAnadirJugador,
       abrirModalFinalizarRonda,
       cerrarModalFinalizarRonda,
       finalizarRonda,

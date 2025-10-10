@@ -16,26 +16,38 @@
         <div class="flex flex-wrap gap-2">
           <button
             @click="$emit('finalizar-ronda')"
-            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shadow-md"
           >
             <span>✓</span>
-            <span>Finalizar Ronda</span>
+            <span class="hidden sm:inline">Finalizar Ronda</span>
+            <span class="sm:hidden">Finalizar</span>
           </button>
           
           <button
             v-if="rondaActual > 1"
             @click="$emit('deshacer-ronda')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shadow-md"
           >
             <span>↶</span>
             <span class="hidden sm:inline">Deshacer</span>
           </button>
           
           <button
-            @click="$emit('volver-inicio')"
-            class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+            v-if="puedeAnadirJugador"
+            @click="$emit('anadir-jugador')"
+            class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shadow-md"
           >
-            Salir
+            <span>➕</span>
+            <span class="hidden sm:inline">Añadir Jugador</span>
+            <span class="sm:hidden">Añadir</span>
+          </button>
+          
+          <button
+            @click="$emit('volver-inicio')"
+            class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold px-4 py-2 rounded-lg transition-colors shadow-md flex items-center gap-2"
+          >
+            <span class="hidden sm:inline">Salir</span>
+            <span class="sm:hidden">✕</span>
           </button>
         </div>
       </div>
@@ -54,8 +66,12 @@ export default {
     limite: {
       type: Number,
       required: true
+    },
+    puedeAnadirJugador: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['finalizar-ronda', 'deshacer-ronda', 'volver-inicio']
+  emits: ['finalizar-ronda', 'deshacer-ronda', 'anadir-jugador', 'volver-inicio']
 }
 </script>
