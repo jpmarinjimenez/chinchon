@@ -64,11 +64,13 @@
                                         <!-- Controles adicionales -->
                                         <div class="flex items-center gap-3 justify-between sm:justify-start">
                                             <!-- Checkbox de -10 -->
-                                            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200">
+                                            <div
+                                                class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200">
                                                 <input
                                                     :id="`menos10-${jugador.id}`"
                                                     v-model="hizoMenos10[jugador.id]"
                                                     type="checkbox"
+                                                    tabindex="-1"
                                                     class="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
                                                     :aria-label="`${jugador.nombre} hizo -10`"
                                                     @change="manejarMenos10(jugador.id)" />
@@ -82,6 +84,7 @@
                                             <!-- Botón Chinchón -->
                                             <button
                                                 type="button"
+                                                tabindex="-1"
                                                 @click="confirmarChinchon(jugador)"
                                                 class="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all transform hover:scale-105 shadow-md text-sm whitespace-nowrap">
                                                 🏆 Chinchón
@@ -95,6 +98,7 @@
                             <div class="mt-6">
                                 <button
                                     type="button"
+                                    tabindex="-1"
                                     @click="mostrarAyuda = !mostrarAyuda"
                                     class="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
                                     <span class="text-lg">ℹ️</span>
@@ -103,14 +107,16 @@
 
                                 <!-- Ayuda colapsable -->
                                 <Transition name="slide-down">
-                                    <div v-if="mostrarAyuda" class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                                    <div
+                                        v-if="mostrarAyuda"
+                                        class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
                                         <p class="text-sm text-blue-800">
                                             <span class="font-semibold">💡 Consejo:</span>
-                                            Marca el checkbox <strong>"-10"</strong> si el jugador hizo una jugada especial.
-                                            Solo un jugador puede hacer -10 por ronda.
+                                            Marca el checkbox <strong>"-10"</strong> si el jugador hizo una jugada
+                                            especial. Solo un jugador puede hacer -10 por ronda.
                                             <span class="block mt-1"
-                                                >El botón <strong>"🏆 Chinchón"</strong> termina la partida inmediatamente y
-                                                ese jugador gana.</span
+                                                >El botón <strong>"🏆 Chinchón"</strong> termina la partida
+                                                inmediatamente y ese jugador gana.</span
                                             >
                                         </p>
                                     </div>
@@ -119,7 +125,9 @@
 
                             <!-- Botones -->
                             <div class="mt-6 flex gap-3 justify-end">
-                                <button type="button" @click="cerrar" class="btn-secondary">Cancelar</button>
+                                <button type="button" @click="cerrar" class="btn-secondary" tabindex="-1">
+                                    Cancelar
+                                </button>
                                 <button type="submit" class="btn-primary" :disabled="!formularioValido">
                                     ✓ Confirmar Ronda
                                 </button>
@@ -168,7 +176,10 @@ export default {
             return props.jugadores.every((jugador) => {
                 const puntos = puntosRonda.value[jugador.id];
                 // El campo es válido si tiene un valor numérico >= 0 o si hizo -10
-                return hizoMenos10.value[jugador.id] || (puntos !== null && puntos !== undefined && puntos !== '' && puntos >= 0);
+                return (
+                    hizoMenos10.value[jugador.id] ||
+                    (puntos !== null && puntos !== undefined && puntos !== '' && puntos >= 0)
+                );
             });
         });
 
