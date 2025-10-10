@@ -181,10 +181,11 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
 import { useSeo } from '@/composables/useSeo'
+import { useAudio } from '@/composables/useAudio'
 import HeaderBar from '@/components/HeaderBar.vue'
 import PlayerCard from '@/components/PlayerCard.vue'
 import RoundsList from '@/components/RoundsList.vue'
@@ -207,6 +208,7 @@ export default {
   setup() {
     const router = useRouter()
     const gameStore = useGameStore()
+    const { reproducirSonidoVictoria } = useAudio()
 
     // SEO para página de juego
     useSeo({
@@ -234,6 +236,16 @@ export default {
 
     const puedeAnadirJugador = computed(() => {
       return gameStore.juegoActivo && !gameStore.juegoFinalizado && gameStore.jugadores.length < 8
+    })
+
+    // Reproducir sonido de victoria cuando el juego finaliza
+    watch(() => gameStore.juegoFinalizado, (finalizado, finalizadoAnterior) => {
+      if (finalizado && !finalizadoAnterior) {
+        // El juego acaba de finalizar, reproducir sonido de victoria
+        setTimeout(() => {
+          reproducirSonidoVictoria()
+        }, 300) // Pequeño delay para que coincida con la animación
+      }
     })
 
     const abrirModalFinalizarRonda = () => {

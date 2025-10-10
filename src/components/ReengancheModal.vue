@@ -86,6 +86,7 @@
 
 <script>
 import { onMounted } from 'vue'
+import { useAudio } from '@/composables/useAudio'
 
 export default {
   name: 'ReengancheModal',
@@ -105,48 +106,12 @@ export default {
   },
   emits: ['reenganchar', 'eliminar', 'cerrar'],
   setup(props, { emit }) {
+    const { reproducirSonidoAlerta } = useAudio()
+    
     onMounted(() => {
       // Reproducir sonido de alerta
       reproducirSonidoAlerta()
     })
-
-    const reproducirSonidoAlerta = () => {
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)()
-        
-        // Primer tono
-        const oscillator1 = audioContext.createOscillator()
-        const gainNode1 = audioContext.createGain()
-        
-        oscillator1.connect(gainNode1)
-        gainNode1.connect(audioContext.destination)
-        
-        oscillator1.frequency.value = 500
-        oscillator1.type = 'square'
-        gainNode1.gain.setValueAtTime(0.2, audioContext.currentTime)
-        gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
-        
-        oscillator1.start(audioContext.currentTime)
-        oscillator1.stop(audioContext.currentTime + 0.2)
-        
-        // Segundo tono
-        const oscillator2 = audioContext.createOscillator()
-        const gainNode2 = audioContext.createGain()
-        
-        oscillator2.connect(gainNode2)
-        gainNode2.connect(audioContext.destination)
-        
-        oscillator2.frequency.value = 400
-        oscillator2.type = 'square'
-        gainNode2.gain.setValueAtTime(0.2, audioContext.currentTime + 0.2)
-        gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4)
-        
-        oscillator2.start(audioContext.currentTime + 0.2)
-        oscillator2.stop(audioContext.currentTime + 0.4)
-      } catch (error) {
-        console.log('Audio no disponible:', error)
-      }
-    }
 
     const reenganchar = (jugadorId) => {
       emit('reenganchar', jugadorId)

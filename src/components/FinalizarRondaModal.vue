@@ -142,6 +142,7 @@
 
 <script>
 import { ref, computed, onMounted, nextTick } from 'vue';
+import { useAudio } from '@/composables/useAudio';
 
 export default {
     name: 'FinalizarRondaModal',
@@ -153,6 +154,8 @@ export default {
     },
     emits: ['confirmar', 'cerrar', 'chinchon'],
     setup(props, { emit }) {
+        const { reproducirSonidoEspecial } = useAudio();
+        
         const puntosRonda = ref({});
         const hizoMenos10 = ref({});
         const inputPuntos = ref([]);
@@ -208,29 +211,6 @@ export default {
                 )
             ) {
                 emit('chinchon', jugador.id);
-            }
-        };
-
-        const reproducirSonidoEspecial = () => {
-            // Efecto de sonido simple usando Web Audio API
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
-
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
-            } catch (error) {
-                console.log('Audio no disponible:', error);
             }
         };
 
