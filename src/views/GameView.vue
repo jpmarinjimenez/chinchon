@@ -50,7 +50,18 @@
                     :class="{ 'opacity-60': jugador.eliminado }"
                   >
                     <div class="flex flex-col items-center">
-                      <span>{{ jugador.nombre }}</span>
+                      <div class="flex items-center gap-2">
+                        <span>{{ jugador.nombre }}</span>
+                        <button
+                          @click="abrirModalEditarNombre(jugador)"
+                          class="text-gray-400 hover:text-blue-600 transition-colors p-1"
+                          :aria-label="`Editar nombre de ${jugador.nombre}`"
+                        >
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                      </div>
                       <span v-if="jugador.eliminado" class="text-xs bg-red-500 px-2 py-1 rounded-full mt-1">
                         Eliminado
                       </span>
@@ -119,6 +130,7 @@
           :jugador="jugador"
           :rondas="gameStore.rondas"
           :limite="gameStore.limiteEliminacion"
+          @editar-nombre="abrirModalEditarNombre"
         />
       </div>
 
@@ -156,6 +168,15 @@
       @confirmar="anadirJugador"
       @cerrar="cerrarModalAnadirJugador"
     />
+
+    <!-- Modal Editar Nombre -->
+    <EditarNombreModal
+      v-if="mostrarModalEditarNombre && jugadorAEditar"
+      :jugador="jugadorAEditar"
+      :jugadores-existentes="gameStore.jugadores"
+      @confirmar="editarNombreJugador"
+      @cerrar="cerrarModalEditarNombre"
+    />
   </div>
 </template>
 
@@ -170,6 +191,7 @@ import RoundsList from '@/components/RoundsList.vue'
 import FinalizarRondaModal from '@/components/FinalizarRondaModal.vue'
 import ReengancheModal from '@/components/ReengancheModal.vue'
 import AnadirJugadorModal from '@/components/AnadirJugadorModal.vue'
+import EditarNombreModal from '@/components/EditarNombreModal.vue'
 
 export default {
   name: 'GameView',
@@ -179,7 +201,8 @@ export default {
     RoundsList,
     FinalizarRondaModal,
     ReengancheModal,
-    AnadirJugadorModal
+    AnadirJugadorModal,
+    EditarNombreModal
   },
   setup() {
     const router = useRouter()
@@ -200,6 +223,8 @@ export default {
     const mostrarModalFinalizar = ref(false)
     const mostrarModalReenganche = ref(false)
     const mostrarModalAnadirJugador = ref(false)
+    const mostrarModalEditarNombre = ref(false)
+    const jugadorAEditar = ref(null)
     const jugadoresQueAlcanzaronLimite = ref([])
 
     const puntosReenganche = computed(() => {
@@ -317,11 +342,29 @@ export default {
       }
     }
 
+    const abrirModalEditarNombre = (jugador) => {
+      jugadorAEditar.value = jugador
+      mostrarModalEditarNombre.value = true
+    }
+
+    const cerrarModalEditarNombre = () => {
+      mostrarModalEditarNombre.value = false
+      jugadorAEditar.value = null
+    }
+
+    const editarNombreJugador = ({ jugadorId, nuevoNombre }) => {
+      // El modal ya validó que no hay duplicados, solo actualizar el nombre
+      gameStore.editarNombreJugador(jugadorId, nuevoNombre)
+      cerrarModalEditarNombre()
+    }
+
     return {
       gameStore,
       mostrarModalFinalizar,
       mostrarModalReenganche,
       mostrarModalAnadirJugador,
+      mostrarModalEditarNombre,
+      jugadorAEditar,
       jugadoresQueAlcanzaronLimite,
       puntosReenganche,
       puedeAnadirJugador,
@@ -338,7 +381,10 @@ export default {
       nuevaPartida,
       abrirModalAnadirJugador,
       cerrarModalAnadirJugador,
-      anadirJugador
+      anadirJugador,
+      abrirModalEditarNombre,
+      cerrarModalEditarNombre,
+      editarNombreJugador
     }
   }
 }

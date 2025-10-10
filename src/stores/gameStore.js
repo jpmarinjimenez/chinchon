@@ -241,13 +241,29 @@ export const useGameStore = defineStore('game', {
      * Edita el nombre de un jugador
      * @param {string} jugadorId - ID del jugador
      * @param {string} nuevoNombre - Nuevo nombre del jugador
+     * @returns {boolean} - true si se editó correctamente, false si hubo error
      */
     editarNombreJugador(jugadorId, nuevoNombre) {
       const jugador = this.jugadores.find(j => j.id === jugadorId)
-      if (jugador) {
-        jugador.nombre = nuevoNombre.trim()
-        this.guardarEnLocalStorage()
-      }
+      if (!jugador) return false
+
+      const nombreTrim = nuevoNombre.trim()
+      
+      // Validar que el nombre no esté vacío
+      if (!nombreTrim) return false
+
+      // Validar que no exista otro jugador con ese nombre
+      const nombreExiste = this.jugadores.some(
+        j => j.id !== jugadorId && j.nombre.toLowerCase() === nombreTrim.toLowerCase()
+      )
+      
+      if (nombreExiste) return false
+
+      // Actualizar el nombre
+      jugador.nombre = nombreTrim
+      this.guardarEnLocalStorage()
+      
+      return true
     },
 
     /**

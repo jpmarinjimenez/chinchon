@@ -8,8 +8,19 @@
   >
     <!-- Header de la tarjeta -->
     <div class="flex items-center justify-between mb-4">
-      <div>
-        <h3 class="text-xl font-bold text-gray-800">{{ jugador.nombre }}</h3>
+      <div class="flex-1">
+        <div class="flex items-center gap-2">
+          <h3 class="text-xl font-bold text-gray-800">{{ jugador.nombre }}</h3>
+          <button
+            @click="$emit('editar-nombre', jugador)"
+            class="text-gray-400 hover:text-blue-600 transition-colors p-1"
+            :aria-label="`Editar nombre de ${jugador.nombre}`"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+        </div>
         <div class="flex gap-2 mt-1">
           <span
             v-if="jugador.eliminado"
@@ -78,6 +89,7 @@ export default {
       type: Number,
       required: true
     }
-  }
+  },
+  emits: ['editar-nombre']
 }
 </script>
