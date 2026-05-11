@@ -21,7 +21,9 @@
                 <p v-if="mostrarErrores && !limiteValido" class="text-xs text-red-600 mt-1">
                     ⚠️ El límite debe ser al menos 50 puntos
                 </p>
-                <p v-else class="text-xs text-gray-500 mt-1">Valor típico: 100 puntos</p>
+                <p v-else class="text-xs text-gray-500 mt-1">
+                    Esto significa que si un jugador llega a {{ limite - 1 }} puntos, aún no será eliminado.
+                </p>
             </div>
 
             <!-- Nombres de jugadores -->
