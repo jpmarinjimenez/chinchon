@@ -14,7 +14,7 @@
                     type="number"
                     min="50"
                     max="500"
-                    step="10"
+                    step="1"
                     class="input-field"
                     :class="{ 'border-red-500': mostrarErrores && !limiteValido }"
                     required />
@@ -90,7 +90,7 @@ export default {
     name: 'NewGameForm',
     emits: ['iniciar-juego'],
     setup(props, { emit }) {
-        const limite = ref(100);
+        const limite = ref(101);
         const nombresJugadores = ref(['', '']);
         const mostrarErrores = ref(false);
 
