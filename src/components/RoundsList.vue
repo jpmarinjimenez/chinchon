@@ -13,7 +13,7 @@
       >
         <div class="flex items-center justify-between">
           <h3 class="font-semibold text-parchment text-sm font-display">Ronda {{ ronda.numero }}</h3>
-          <span class="text-xs text-navy-500">{{ formatearFecha(ronda.fecha) }}</span>
+          <span class="text-xs text-navy-500 pr-6">{{ formatearFecha(ronda.fecha) }}</span>
         </div>
         
         <div class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-sm">

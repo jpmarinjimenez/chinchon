@@ -90,7 +90,7 @@
                                             <button
                                                 type="button"
                                                 tabindex="-1"
-                                                @click="confirmarChinchon(jugador)"
+                                                @click.stop="confirmarChinchon(jugador)"
                                                 class="flex-1 sm:flex-none btn-gold text-sm whitespace-nowrap py-2">
                                                 🏆 Chinchón
                                             </button>
@@ -209,14 +209,7 @@ export default {
         };
 
         const confirmarChinchon = (jugador) => {
-            // Confirmar que está seguro
-            if (
-                confirm(
-                    `¿Estás seguro de que ${jugador.nombre} ha hecho CHINCHÓN?\n\nLa partida terminará inmediatamente y ${jugador.nombre} ganará.`
-                )
-            ) {
-                emit('chinchon', jugador.id);
-            }
+            emit('chinchon', jugador.id);
         };
 
         const confirmar = () => {

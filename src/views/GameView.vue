@@ -118,7 +118,7 @@
                     class="text-center py-4 tabular-nums"
                   >
                     <span
-                      class="text-lg font-bold font-display"
+                      class="text-3xl font-bold font-display"
                       :class="{
                         'score-danger': jugador.puntosAcumulados >= gameStore.limiteEliminacion,
                         'score-safe': jugador.puntosAcumulados <= 0 || jugador.puntosAcumulados < gameStore.limiteEliminacion / 2,
@@ -357,9 +357,14 @@ export default {
     }
 
     const manejarChinchon = (jugadorId) => {
-      // Chinchón: termina la partida inmediatamente
-      gameStore.finalizarJuegoPorChinchon(jugadorId)
-      cerrarModalFinalizarRonda()
+      const jugador = gameStore.jugadores.find(j => j.id === jugadorId)
+      if (!jugador) return
+
+      if (confirm(`¿Estás seguro de que ${jugador.nombre} ha hecho CHINCHÓN?\n\nLa partida terminará inmediatamente y ${jugador.nombre} ganará.`)) {
+        // Chinchón: termina la partida inmediatamente
+        gameStore.finalizarJuegoPorChinchon(jugadorId)
+        cerrarModalFinalizarRonda()
+      }
     }
 
     const abrirModalAnadirJugador = () => {
