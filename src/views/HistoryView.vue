@@ -1,13 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+  <div class="min-h-screen py-6 sm:py-8 relative z-10">
     <div class="container mx-auto px-4">
       <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 class="text-4xl font-bold text-gray-800">📊 Historial de Partidas</h1>
-          <p class="text-gray-600 mt-2">Revisa tus partidas anteriores</p>
+          <h1 class="text-3xl sm:text-4xl font-display font-bold text-parchment flex items-center gap-3">
+            <span class="text-crimson-400">♠</span>
+            Historial de Partidas
+          </h1>
+          <p class="text-navy-400 mt-2 text-sm sm:text-base">Revisa tus partidas anteriores</p>
         </div>
-        <button @click="volverInicio" class="btn-secondary">
+        <button @click="volverInicio" class="btn-secondary text-sm self-start sm:self-auto">
           ← Volver
         </button>
       </div>
@@ -17,63 +20,63 @@
         <div
           v-for="partida in gameStore.historialPartidas"
           :key="partida.id"
-          class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow"
+          class="glass-card hover:border-gold-600/20 transition-all duration-300"
         >
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <!-- Información de la partida -->
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
               <div class="flex items-center gap-3 mb-2">
                 <span class="text-2xl">🏆</span>
-                <div class="flex-1">
+                <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 flex-wrap">
-                    <h3 class="text-xl font-semibold text-gray-800">
+                    <h3 class="text-lg sm:text-xl font-display font-semibold text-parchment truncate">
                       Ganador: {{ partida.ganador }}
                     </h3>
                     <span
                       v-if="esGanadorPorChinchon(partida)"
-                      class="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-full text-xs animate-pulse"
+                      class="badge bg-gradient-to-r from-gold-500/20 to-gold-600/20 text-gold-300 border-gold-500/30 border animate-pulse-fast text-[10px] sm:text-xs"
                     >
                       🎉 CHINCHÓN
                     </span>
                   </div>
-                  <p class="text-sm text-gray-500">
+                  <p class="text-xs sm:text-sm text-navy-400 mt-0.5">
                     {{ formatearFecha(partida.fecha) }}
                   </p>
                   <p
                     v-if="esGanadorPorChinchon(partida)"
-                    class="text-xs text-orange-600 font-semibold mt-1"
+                    class="text-xs text-gold-500 font-semibold mt-1"
                   >
                     Victoria automática
                   </p>
                 </div>
               </div>
               
-              <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-600">
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold">Jugadores:</span>
-                  <span>{{ partida.jugadores.length }}</span>
+              <div class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs sm:text-sm text-navy-300">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-crimson-400">♥</span>
+                  <span class="font-medium text-navy-200">{{ partida.jugadores.length }}</span> jugadores
                 </div>
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold">Rondas:</span>
-                  <span>{{ partida.rondas.length }}</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-navy-400">♣</span>
+                  <span class="font-medium text-navy-200">{{ partida.rondas.length }}</span> rondas
                 </div>
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold">Límite:</span>
-                  <span>{{ partida.limiteEliminacion }} pts</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-gold-500">♦</span>
+                  <span class="font-medium text-navy-200">{{ partida.limiteEliminacion }}</span> pts
                 </div>
               </div>
 
               <!-- Clasificación -->
               <div class="mt-4">
-                <p class="text-sm font-semibold text-gray-700 mb-2">Clasificación final:</p>
-                <div class="flex flex-wrap gap-2">
+                <p class="text-xs font-semibold text-navy-400 mb-2 uppercase tracking-wider">Clasificación final</p>
+                <div class="flex flex-wrap gap-1.5">
                   <span
                     v-for="(jugador, index) in obtenerClasificacion(partida)"
                     :key="jugador.id"
-                    class="px-3 py-1 rounded-full text-sm font-medium"
+                    class="badge text-[10px] sm:text-xs"
                     :class="{
-                      'bg-yellow-100 text-yellow-800': index === 0,
-                      'bg-gray-100 text-gray-700': index > 0
+                      'bg-gold-500/15 text-gold-300 border border-gold-500/20': index === 0,
+                      'bg-white/5 text-navy-300 border border-white/5': index > 0
                     }"
                   >
                     {{ index + 1 }}. {{ jugador.nombre }} ({{ jugador.puntosAcumulados }} pts)
@@ -83,16 +86,16 @@
             </div>
 
             <!-- Acciones -->
-            <div class="flex flex-col gap-2">
+            <div class="flex sm:flex-col gap-2 shrink-0">
               <button
                 @click="verDetallePartida(partida)"
-                class="btn-primary text-sm"
+                class="btn-primary text-xs sm:text-sm flex-1 sm:flex-none"
               >
                 Ver Detalle
               </button>
               <button
                 @click="eliminarPartida(partida.id)"
-                class="btn-danger text-sm"
+                class="btn-danger text-xs sm:text-sm flex-1 sm:flex-none"
               >
                 Eliminar
               </button>
@@ -102,12 +105,12 @@
       </div>
 
       <!-- Mensaje si no hay partidas -->
-      <div v-else class="bg-white rounded-xl shadow-lg p-12 text-center">
-        <div class="text-6xl mb-4">📭</div>
-        <h2 class="text-2xl font-semibold text-gray-700 mb-2">No hay partidas en el historial</h2>
-        <p class="text-gray-500 mb-6">Comienza una nueva partida para verla aquí</p>
+      <div v-else class="glass-card text-center py-12">
+        <div class="text-5xl sm:text-6xl mb-4 opacity-50">📭</div>
+        <h2 class="text-xl sm:text-2xl font-display font-semibold text-parchment mb-2">No hay partidas en el historial</h2>
+        <p class="text-navy-400 mb-6 text-sm sm:text-base">Comienza una nueva partida para verla aquí</p>
         <button @click="volverInicio" class="btn-primary">
-          Iniciar Nueva Partida
+          ♠ Iniciar Nueva Partida
         </button>
       </div>
     </div>
@@ -119,44 +122,46 @@
       @click.self="cerrarDetalle"
     >
       <div class="modal-content max-w-4xl">
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Detalle de Partida</h2>
+        <div class="p-5 sm:p-6 border-b border-white/5" style="background: linear-gradient(135deg, rgba(36, 59, 83, 0.5) 0%, rgba(26, 45, 66, 0.5) 100%);">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl sm:text-2xl font-display font-bold text-parchment">Detalle de Partida</h2>
             <button
               @click="cerrarDetalle"
-              class="text-gray-400 hover:text-gray-600 text-2xl"
+              class="text-navy-400 hover:text-parchment text-2xl leading-none p-2 rounded-full hover:bg-white/5 transition-colors"
             >
               ×
             </button>
           </div>
+        </div>
 
-          <div class="mb-6">
-            <p class="text-gray-600">
-              <span class="font-semibold">Fecha:</span> {{ formatearFecha(partidaSeleccionada.fecha) }}
+        <div class="p-5 sm:p-6">
+          <div class="mb-5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-navy-300">
+            <p>
+              <span class="font-semibold text-navy-200">Fecha:</span> {{ formatearFecha(partidaSeleccionada.fecha) }}
             </p>
             <div class="flex items-center gap-2 flex-wrap">
-              <p class="text-gray-600">
-                <span class="font-semibold">Ganador:</span> {{ partidaSeleccionada.ganador }}
+              <p>
+                <span class="font-semibold text-navy-200">Ganador:</span> {{ partidaSeleccionada.ganador }}
               </p>
               <span
                 v-if="esGanadorPorChinchon(partidaSeleccionada)"
-                class="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-full text-xs"
+                class="badge bg-gold-500/15 text-gold-300 border border-gold-500/20 text-[10px]"
               >
-                🎉 CHINCHÓN - Victoria automática
+                🎉 CHINCHÓN
               </span>
             </div>
           </div>
 
           <!-- Tabla de puntuaciones -->
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-              <thead class="bg-blue-600 text-white">
+          <div class="overflow-x-auto rounded-xl">
+            <table class="table-bicycle">
+              <thead>
                 <tr>
-                  <th class="px-4 py-2 text-left">Ronda</th>
+                  <th class="text-left">Ronda</th>
                   <th
                     v-for="jugador in partidaSeleccionada.jugadores"
                     :key="jugador.id"
-                    class="px-4 py-2 text-center"
+                    class="text-center"
                   >
                     {{ jugador.nombre }}
                   </th>
@@ -166,31 +171,32 @@
                 <tr
                   v-for="ronda in partidaSeleccionada.rondas"
                   :key="ronda.numero"
-                  class="border-b hover:bg-gray-50"
                 >
-                  <td class="px-4 py-2 font-semibold">{{ ronda.numero }}</td>
+                  <td class="font-semibold text-navy-300 text-sm">{{ ronda.numero }}</td>
                   <td
                     v-for="jugador in partidaSeleccionada.jugadores"
                     :key="jugador.id"
-                    class="px-4 py-2 text-center"
+                    class="text-center tabular-nums"
                   >
                     <span
                       :class="{
-                        'text-green-600 font-bold': ronda.puntos[jugador.id] === -10
+                        'score-special': ronda.puntos[jugador.id] === -10
                       }"
                     >
                       {{ ronda.puntos[jugador.id] ?? '-' }}
                     </span>
                   </td>
                 </tr>
-                <tr class="bg-gray-100 font-bold">
-                  <td class="px-4 py-2">Total</td>
+                <tr class="border-t-2 border-gold-600/30">
+                  <td class="font-bold text-gold-400 py-4 uppercase text-sm tracking-wider">Total</td>
                   <td
                     v-for="jugador in partidaSeleccionada.jugadores"
                     :key="jugador.id"
-                    class="px-4 py-2 text-center"
+                    class="text-center py-4 tabular-nums"
                   >
-                    {{ jugador.puntosAcumulados }}
+                    <span class="font-bold font-display text-parchment">
+                      {{ jugador.puntosAcumulados }}
+                    </span>
                   </td>
                 </tr>
               </tbody>

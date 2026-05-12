@@ -10,32 +10,34 @@
       <Transition name="slide-up">
         <div class="modal-content max-w-md">
           <!-- Header -->
-          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-xl">
+          <div class="p-5 sm:p-6 border-b border-white/5" style="background: linear-gradient(135deg, rgba(36, 59, 83, 0.5) 0%, rgba(26, 45, 66, 0.5) 100%);">
             <div class="flex items-center justify-between">
-              <h2 id="editar-nombre-title" class="text-2xl font-bold">Editar Nombre</h2>
+              <div>
+                <h2 id="editar-nombre-title" class="text-xl sm:text-2xl font-display font-bold text-parchment">Editar Nombre</h2>
+                <p class="text-navy-300 mt-1 text-sm">Cambia el nombre del jugador</p>
+              </div>
               <button
                 @click="cerrar"
-                class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                class="text-navy-400 hover:text-parchment rounded-full p-2 transition-colors hover:bg-white/5"
                 aria-label="Cerrar modal"
               >
-                <span class="text-2xl">×</span>
+                <span class="text-2xl leading-none">×</span>
               </button>
             </div>
-            <p class="text-blue-100 mt-2">Cambia el nombre del jugador</p>
           </div>
 
           <!-- Body -->
-          <div class="p-6">
+          <div class="p-5 sm:p-6">
             <form @submit.prevent="confirmar">
               <!-- Nombre actual -->
-              <div class="mb-4 bg-gray-50 border-l-4 border-gray-400 p-4 rounded">
-                <p class="text-sm text-gray-600 mb-1">Nombre actual:</p>
-                <p class="text-lg font-semibold text-gray-800">{{ jugador.nombre }}</p>
+              <div class="mb-4 alert-info">
+                <p class="text-xs text-navy-400 mb-1 uppercase tracking-wider">Nombre actual</p>
+                <p class="text-base font-display font-semibold text-parchment">{{ jugador.nombre }}</p>
               </div>
 
               <!-- Input de nuevo nombre -->
               <div class="mb-4">
-                <label for="nuevo-nombre" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="nuevo-nombre" class="block text-sm font-medium text-navy-200 mb-2">
                   Nuevo nombre
                 </label>
                 <input
@@ -53,21 +55,21 @@
 
               <!-- Mensaje de error -->
               <Transition name="slide-down">
-                <div v-if="mensajeError" class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                  <p class="text-sm text-red-800">
-                    <span class="font-semibold">❌ Error:</span> {{ mensajeError }}
+                <div v-if="mensajeError" class="mb-4 alert-danger">
+                  <p class="text-sm text-crimson-300">
+                    <span class="font-semibold">♦ Error:</span> {{ mensajeError }}
                   </p>
                 </div>
               </Transition>
 
               <!-- Botones -->
               <div class="flex gap-3 justify-end">
-                <button type="button" @click="cerrar" class="btn-secondary">
+                <button type="button" @click="cerrar" class="btn-secondary text-sm">
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  class="btn-primary"
+                  class="btn-primary text-sm"
                   :disabled="!nuevoNombre.trim() || nuevoNombre.trim() === jugador.nombre"
                 >
                   ✓ Guardar Cambios
@@ -160,21 +162,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Animación para el mensaje de error */
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-down-enter-from {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.slide-down-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>

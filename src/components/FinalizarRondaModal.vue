@@ -4,35 +4,37 @@
             <Transition name="slide-up">
                 <div class="modal-content">
                     <!-- Header -->
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-xl">
+                    <div class="p-5 sm:p-6 border-b border-white/5" style="background: linear-gradient(135deg, rgba(22, 101, 52, 0.3) 0%, rgba(26, 45, 66, 0.5) 100%);">
                         <div class="flex items-center justify-between">
-                            <h2 id="modal-title" class="text-2xl font-bold">Finalizar Ronda</h2>
+                            <div>
+                                <h2 id="modal-title" class="text-xl sm:text-2xl font-display font-bold text-parchment">Finalizar Ronda</h2>
+                                <p class="text-navy-300 mt-1 text-sm">Introduce los puntos de cada jugador</p>
+                            </div>
                             <button
                                 @click="cerrar"
-                                class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                                class="text-navy-400 hover:text-parchment rounded-full p-2 transition-colors hover:bg-white/5"
                                 aria-label="Cerrar modal">
-                                <span class="text-2xl">×</span>
+                                <span class="text-2xl leading-none">×</span>
                             </button>
                         </div>
-                        <p class="text-blue-100 mt-2">Introduce los puntos de cada jugador</p>
                     </div>
 
                     <!-- Body -->
-                    <div class="p-6">
+                    <div class="p-5 sm:p-6">
                         <form @submit.prevent="confirmar">
-                            <div class="space-y-3 max-h-[60vh] overflow-y-auto">
+                            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                                 <div
                                     v-for="jugador in jugadores"
                                     :key="jugador.id"
-                                    class="p-4 rounded-lg border-2 transition-all"
+                                    class="p-4 rounded-xl border transition-all duration-200"
                                     :class="{
-                                        'border-green-400 bg-green-50': hizoMenos10[jugador.id],
-                                        'border-gray-200 bg-white': !hizoMenos10[jugador.id],
+                                        'border-felt-600/40 bg-felt-900/20': hizoMenos10[jugador.id],
+                                        'border-white/5 bg-white/[0.02]': !hizoMenos10[jugador.id],
                                     }">
                                     <!-- Nombre del jugador -->
                                     <div class="mb-3">
-                                        <p class="font-semibold text-gray-800 text-lg">{{ jugador.nombre }}</p>
-                                        <p class="text-sm text-gray-500">
+                                        <p class="font-display font-semibold text-parchment text-lg">{{ jugador.nombre }}</p>
+                                        <p class="text-xs text-navy-400 mt-0.5">
                                             Total actual: {{ jugador.puntosAcumulados }} pts
                                         </p>
                                     </div>
@@ -41,7 +43,7 @@
                                     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                                         <!-- Input de puntos -->
                                         <div class="flex-1 sm:flex-none sm:w-32">
-                                            <label class="block text-xs text-gray-600 mb-1 sm:hidden">Puntos:</label>
+                                            <label class="block text-xs text-navy-400 mb-1 sm:hidden">Puntos:</label>
                                             <input
                                                 v-model.number="puntosRonda[jugador.id]"
                                                 type="number"
@@ -49,12 +51,11 @@
                                                 min="0"
                                                 max="999"
                                                 step="1"
-                                                class="input-field text-center text-2xl sm:text-lg font-semibold w-full"
+                                                class="input-field text-center text-2xl sm:text-lg font-semibold w-full tabular-nums"
                                                 :class="{
-                                                    'bg-green-100 border-green-400': hizoMenos10[jugador.id],
-                                                    'bg-gray-100': hizoMenos10[jugador.id],
+                                                    'border-felt-500/40 bg-felt-900/15': hizoMenos10[jugador.id],
                                                 }"
-                                                placeholder="Puntos"
+                                                placeholder="0"
                                                 required
                                                 :disabled="hizoMenos10[jugador.id]"
                                                 :aria-label="`Puntos para ${jugador.nombre}`"
@@ -62,31 +63,35 @@
                                         </div>
 
                                         <!-- Controles adicionales -->
-                                        <div class="flex items-center gap-3 justify-between sm:justify-start">
+                                        <div class="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start">
                                             <!-- Checkbox de -10 -->
-                                            <div
-                                                class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200">
+                                            <label
+                                                :for="`menos10-${jugador.id}`"
+                                                class="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer select-none transition-all duration-200"
+                                                :class="hizoMenos10[jugador.id]
+                                                    ? 'bg-felt-800/30 border border-felt-600/40'
+                                                    : 'bg-white/[0.03] border border-white/8 hover:border-white/15'"
+                                            >
                                                 <input
                                                     :id="`menos10-${jugador.id}`"
                                                     v-model="hizoMenos10[jugador.id]"
                                                     type="checkbox"
                                                     tabindex="-1"
-                                                    class="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
+                                                    class="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
                                                     :aria-label="`${jugador.nombre} hizo -10`"
                                                     @change="manejarMenos10(jugador.id)" />
-                                                <label
-                                                    :for="`menos10-${jugador.id}`"
-                                                    class="text-sm font-semibold text-gray-700 cursor-pointer select-none whitespace-nowrap">
+                                                <span class="text-sm font-semibold whitespace-nowrap"
+                                                    :class="hizoMenos10[jugador.id] ? 'text-green-300' : 'text-navy-300'">
                                                     -10 ✨
-                                                </label>
-                                            </div>
+                                                </span>
+                                            </label>
 
                                             <!-- Botón Chinchón -->
                                             <button
                                                 type="button"
                                                 tabindex="-1"
                                                 @click="confirmarChinchon(jugador)"
-                                                class="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all transform hover:scale-105 shadow-md text-sm whitespace-nowrap">
+                                                class="flex-1 sm:flex-none btn-gold text-sm whitespace-nowrap py-2">
                                                 🏆 Chinchón
                                             </button>
                                         </div>
@@ -95,13 +100,13 @@
                             </div>
 
                             <!-- Botón de ayuda -->
-                            <div class="mt-6">
+                            <div class="mt-5">
                                 <button
                                     type="button"
                                     tabindex="-1"
                                     @click="mostrarAyuda = !mostrarAyuda"
-                                    class="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
-                                    <span class="text-lg">ℹ️</span>
+                                    class="flex items-center gap-2 text-navy-400 hover:text-navy-200 text-sm font-medium transition-colors">
+                                    <span class="text-base">ℹ️</span>
                                     {{ mostrarAyuda ? 'Ocultar ayuda' : 'Ver ayuda' }}
                                 </button>
 
@@ -109,26 +114,26 @@
                                 <Transition name="slide-down">
                                     <div
                                         v-if="mostrarAyuda"
-                                        class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-                                        <p class="text-sm text-blue-800">
-                                            <span class="font-semibold">💡 Consejo:</span>
-                                            Marca el checkbox <strong>"-10"</strong> si el jugador hizo una jugada
+                                        class="mt-3 alert-info">
+                                        <p class="text-sm text-navy-200">
+                                            <span class="font-semibold text-parchment">💡 Consejo:</span>
+                                            Marca el checkbox <strong class="text-parchment">"-10"</strong> si el jugador hizo una jugada
                                             especial. Solo un jugador puede hacer -10 por ronda.
-                                            <span class="block mt-1"
-                                                >El botón <strong>"🏆 Chinchón"</strong> termina la partida
-                                                inmediatamente y ese jugador gana.</span
-                                            >
+                                            <span class="block mt-1">
+                                                El botón <strong class="text-gold-400">"🏆 Chinchón"</strong> termina la partida
+                                                inmediatamente y ese jugador gana.
+                                            </span>
                                         </p>
                                     </div>
                                 </Transition>
                             </div>
 
                             <!-- Botones -->
-                            <div class="mt-6 flex gap-3 justify-end">
-                                <button type="button" @click="cerrar" class="btn-secondary" tabindex="-1">
+                            <div class="mt-5 flex gap-3 justify-end">
+                                <button type="button" @click="cerrar" class="btn-secondary text-sm" tabindex="-1">
                                     Cancelar
                                 </button>
-                                <button type="submit" class="btn-primary" :disabled="!formularioValido">
+                                <button type="submit" class="btn-felt text-sm" :disabled="!formularioValido">
                                     ✓ Confirmar Ronda
                                 </button>
                             </div>
@@ -247,21 +252,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-/* Animación para el panel de ayuda */
-.slide-down-enter-active,
-.slide-down-leave-active {
-    transition: all 0.3s ease;
-}
-
-.slide-down-enter-from {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-.slide-down-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-</style>

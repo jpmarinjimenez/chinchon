@@ -10,26 +10,28 @@
       <Transition name="slide-up">
         <div class="modal-content max-w-md">
           <!-- Header -->
-          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-xl">
+          <div class="p-5 sm:p-6 border-b border-white/5" style="background: linear-gradient(135deg, rgba(36, 59, 83, 0.5) 0%, rgba(26, 45, 66, 0.5) 100%);">
             <div class="flex items-center justify-between">
-              <h2 id="anadir-jugador-title" class="text-2xl font-bold">Añadir Jugador</h2>
+              <div>
+                <h2 id="anadir-jugador-title" class="text-xl sm:text-2xl font-display font-bold text-parchment">Añadir Jugador</h2>
+                <p class="text-navy-300 mt-1 text-sm">Introduce el nombre del nuevo jugador</p>
+              </div>
               <button
                 @click="cerrar"
-                class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                class="text-navy-400 hover:text-parchment rounded-full p-2 transition-colors hover:bg-white/5"
                 aria-label="Cerrar modal"
               >
-                <span class="text-2xl">×</span>
+                <span class="text-2xl leading-none">×</span>
               </button>
             </div>
-            <p class="text-blue-100 mt-2">Introduce el nombre del nuevo jugador</p>
           </div>
 
           <!-- Body -->
-          <div class="p-6">
+          <div class="p-5 sm:p-6">
             <form @submit.prevent="confirmar">
               <!-- Input de nombre -->
               <div class="mb-4">
-                <label for="nombre-jugador" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="nombre-jugador" class="block text-sm font-medium text-navy-200 mb-2">
                   Nombre del jugador
                 </label>
                 <input
@@ -47,31 +49,31 @@
 
               <!-- Mensaje de error -->
               <Transition name="slide-down">
-                <div v-if="mensajeError" class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                  <p class="text-sm text-red-800">
-                    <span class="font-semibold">❌ Error:</span> {{ mensajeError }}
+                <div v-if="mensajeError" class="mb-4 alert-danger">
+                  <p class="text-sm text-crimson-300">
+                    <span class="font-semibold">♦ Error:</span> {{ mensajeError }}
                   </p>
                 </div>
               </Transition>
 
               <!-- Información sobre el reenganche -->
-              <div class="mb-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-                <p class="text-sm text-blue-800">
-                  <span class="font-semibold">💡 Información:</span>
+              <div class="mb-6 alert-info">
+                <p class="text-sm text-navy-200">
+                  <span class="font-semibold text-parchment">💡 Información:</span>
                   El nuevo jugador empezará con
-                  <span class="font-bold">{{ puntosReenganche }} puntos</span>
+                  <span class="font-bold text-gold-400">{{ puntosReenganche }} puntos</span>
                   (los mismos que el jugador más cercano al límite).
                 </p>
               </div>
 
               <!-- Botones -->
               <div class="flex gap-3 justify-end">
-                <button type="button" @click="cerrar" class="btn-secondary">
+                <button type="button" @click="cerrar" class="btn-secondary text-sm">
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  class="btn-primary"
+                  class="btn-primary text-sm"
                   :disabled="!nombreJugador.trim()"
                 >
                   ✓ Añadir Jugador
@@ -158,21 +160,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Animación para el mensaje de error */
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-down-enter-from {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.slide-down-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>

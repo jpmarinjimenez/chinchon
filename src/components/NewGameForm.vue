@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Nueva Partida</h2>
+        <h2 class="text-2xl font-display font-bold text-parchment mb-6">Nueva Partida</h2>
 
         <form @submit.prevent="iniciarJuego">
             <!-- Límite de eliminación -->
             <div class="mb-6">
-                <label for="limite" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label for="limite" class="block text-sm font-semibold text-navy-200 mb-2">
                     ¿Cuántos puntos para ser eliminado?
                 </label>
                 <input
@@ -16,20 +16,20 @@
                     max="500"
                     step="1"
                     class="input-field"
-                    :class="{ 'border-red-500': mostrarErrores && !limiteValido }"
+                    :class="{ 'border-crimson-500': mostrarErrores && !limiteValido }"
                     required />
-                <p v-if="mostrarErrores && !limiteValido" class="text-xs text-red-600 mt-1">
-                    ⚠️ El límite debe ser al menos 50 puntos
+                <p v-if="mostrarErrores && !limiteValido" class="text-xs text-crimson-400 mt-1.5">
+                    ♦ El límite debe ser al menos 50 puntos
                 </p>
-                <p v-else class="text-xs text-gray-500 mt-1">
-                    Esto significa que si un jugador llega a {{ limite - 1 }} puntos, aún no será eliminado.
+                <p v-else class="text-xs text-navy-400 mt-1.5">
+                    Si un jugador llega a {{ limite - 1 }} puntos, aún no será eliminado.
                 </p>
             </div>
 
             <!-- Precios de Entrada y Reenganche -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div>
-                    <label for="precioEntrada" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="precioEntrada" class="block text-sm font-semibold text-navy-200 mb-2">
                         Precio de entrada (€)
                     </label>
                     <input
@@ -42,7 +42,7 @@
                     />
                 </div>
                 <div>
-                    <label for="precioReenganche" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="precioReenganche" class="block text-sm font-semibold text-navy-200 mb-2">
                         Precio de reenganche (€)
                     </label>
                     <input
@@ -58,23 +58,29 @@
 
             <!-- Nombres de jugadores -->
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2"> Nombres de los jugadores (2-8) </label>
+                <label class="block text-sm font-semibold text-navy-200 mb-3">
+                    Nombres de los jugadores (2-8)
+                </label>
 
-                <div class="space-y-2">
+                <div class="space-y-2.5">
                     <div v-for="(nombre, index) in nombresJugadores" :key="index" class="flex gap-2">
+                        <div class="flex items-center justify-center w-8 h-[46px] text-sm font-semibold shrink-0"
+                             :class="index % 2 === 0 ? 'text-crimson-400' : 'text-navy-300'">
+                            {{ index % 4 === 0 ? '♠' : index % 4 === 1 ? '♥' : index % 4 === 2 ? '♣' : '♦' }}
+                        </div>
                         <input
                             v-model="nombresJugadores[index]"
                             type="text"
                             :placeholder="`Jugador ${index + 1}`"
-                            class="input-field"
-                            :class="{ 'border-red-500': mostrarErrores && !nombreValido(index) }"
+                            class="input-field flex-1"
+                            :class="{ 'border-crimson-500': mostrarErrores && !nombreValido(index) }"
                             required
                             maxlength="20" />
                         <button
                             v-if="nombresJugadores.length > 2"
                             type="button"
                             @click="eliminarJugador(index)"
-                            class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+                            class="px-3 py-2 rounded-xl text-crimson-400 hover:text-crimson-300 hover:bg-crimson-500/10 transition-all duration-200 shrink-0">
                             ✕
                         </button>
                     </div>
@@ -84,25 +90,25 @@
                     v-if="nombresJugadores.length < 8"
                     type="button"
                     @click="agregarJugador"
-                    class="mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
-                    <span>+</span>
+                    class="mt-3 text-gold-400 hover:text-gold-300 text-sm font-medium flex items-center gap-1.5 transition-colors">
+                    <span class="text-lg leading-none">+</span>
                     <span>Agregar jugador</span>
                 </button>
 
-                <p v-if="mostrarErrores && !jugadoresValidos" class="text-xs text-red-600 mt-2">
-                    ⚠️ Todos los jugadores deben tener un nombre
+                <p v-if="mostrarErrores && !jugadoresValidos" class="text-xs text-crimson-400 mt-2">
+                    ♦ Todos los jugadores deben tener un nombre
                 </p>
-                <p v-if="mostrarErrores && nombresJugadores.length < 2" class="text-xs text-red-600 mt-2">
-                    ⚠️ Se necesitan al menos 2 jugadores
+                <p v-if="mostrarErrores && nombresJugadores.length < 2" class="text-xs text-crimson-400 mt-2">
+                    ♦ Se necesitan al menos 2 jugadores
                 </p>
             </div>
 
             <!-- Mensaje de error general -->
             <div
                 v-if="mostrarErrores && !formularioValido"
-                class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
-                <p class="text-sm text-red-800 font-semibold">❌ Revisa los siguientes errores:</p>
-                <ul class="mt-2 text-xs text-red-700 list-disc list-inside space-y-1">
+                class="mb-4 alert-danger">
+                <p class="text-sm text-crimson-300 font-semibold">♦ Revisa los siguientes errores:</p>
+                <ul class="mt-2 text-xs text-crimson-400 list-disc list-inside space-y-1">
                     <li v-if="!limiteValido">El límite debe ser al menos 50 puntos</li>
                     <li v-if="nombresJugadores.length < 2">Se necesitan al menos 2 jugadores</li>
                     <li v-if="!jugadoresValidos">Todos los jugadores deben tener un nombre</li>
@@ -110,7 +116,9 @@
             </div>
 
             <!-- Botón de inicio -->
-            <button type="submit" class="w-full btn-primary text-lg py-3">🎮 Iniciar Partida</button>
+            <button type="submit" class="w-full btn-primary text-base sm:text-lg py-3.5 font-bold">
+                ♠ Iniciar Partida
+            </button>
         </form>
     </div>
 </template>

@@ -10,47 +10,47 @@
       <Transition name="slide-up">
         <div class="modal-content max-w-lg">
           <!-- Header con alerta -->
-          <div class="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-t-xl">
+          <div class="p-6 text-center border-b border-white/5" style="background: linear-gradient(135deg, rgba(196, 30, 49, 0.2) 0%, rgba(26, 45, 66, 0.5) 100%);">
             <div class="flex items-center justify-center mb-3">
-              <span class="text-6xl animate-pulse-fast">⚠️</span>
+              <span class="text-5xl sm:text-6xl animate-pulse-fast">⚠️</span>
             </div>
-            <h2 id="reenganche-title" class="text-2xl font-bold text-center">
+            <h2 id="reenganche-title" class="text-xl sm:text-2xl font-display font-bold text-parchment">
               ¡Límite Alcanzado!
             </h2>
-            <p class="text-center text-red-100 mt-2">
+            <p class="text-navy-300 mt-2 text-sm">
               {{ jugadores.length > 1 ? 'Algunos jugadores han' : 'Un jugador ha' }} alcanzado el límite de {{ limite }} puntos
             </p>
           </div>
 
           <!-- Body -->
-          <div class="p-6">
+          <div class="p-5 sm:p-6">
             <!-- Procesar cada jugador -->
             <div
               v-for="jugador in jugadores"
               :key="jugador.id"
-              class="mb-6 last:mb-0"
+              class="mb-5 last:mb-0"
             >
-              <div class="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-red-300 rounded-xl p-5">
+              <div class="rounded-xl border border-crimson-700/30 bg-crimson-950/20 p-5">
                 <!-- Info del jugador -->
                 <div class="text-center mb-4">
-                  <h3 class="text-2xl font-bold text-gray-800">{{ jugador.nombre }}</h3>
-                  <p class="text-red-600 font-semibold text-lg mt-1">
+                  <h3 class="text-xl sm:text-2xl font-display font-bold text-parchment">{{ jugador.nombre }}</h3>
+                  <p class="text-crimson-400 font-semibold text-lg mt-1 tabular-nums">
                     {{ jugador.puntosAcumulados }} puntos
                   </p>
-                  <p v-if="jugador.vecesReenganchado > 0" class="text-sm text-gray-600 mt-1">
+                  <p v-if="jugador.vecesReenganchado > 0" class="text-sm text-navy-400 mt-1">
                     Ya se ha reenganchado {{ jugador.vecesReenganchado }} {{ jugador.vecesReenganchado === 1 ? 'vez' : 'veces' }}
                   </p>
                 </div>
 
                 <!-- Explicación del reenganche -->
-                <div class="bg-white rounded-lg p-4 mb-4">
-                  <p class="text-sm text-gray-700 mb-2">
-                    <span class="font-semibold">Si se reengancha:</span>
-                    Continuará con <span class="font-bold text-blue-600">{{ puntosReenganche }} puntos</span>
-                    (los mismos que el jugador que está más cerca del límite sin alcanzarlo).
+                <div class="rounded-xl p-4 mb-4 bg-white/[0.03] border border-white/5">
+                  <p class="text-sm text-navy-200 mb-2">
+                    <span class="font-semibold text-parchment">Si se reengancha:</span>
+                    Continuará con <span class="font-bold text-gold-400">{{ puntosReenganche }} puntos</span>
+                    (los mismos que el jugador más cercano al límite).
                   </p>
-                  <p class="text-sm text-gray-700">
-                    <span class="font-semibold">Si se elimina:</span>
+                  <p class="text-sm text-navy-200">
+                    <span class="font-semibold text-parchment">Si se elimina:</span>
                     Quedará fuera del juego.
                   </p>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="flex gap-3">
                   <button
                     @click="reenganchar(jugador.id)"
-                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="flex-1 btn-primary py-3"
                   >
                     ♻️ Reenganchar
                   </button>
@@ -67,7 +67,7 @@
                     @click="eliminar(jugador.id)"
                     class="flex-1 btn-danger py-3"
                   >
-                    ❌ Eliminar
+                    ✕ Eliminar
                   </button>
                 </div>
               </div>
@@ -75,7 +75,7 @@
 
             <!-- Mensaje si todos decidieron -->
             <div v-if="jugadores.length === 0" class="text-center py-8">
-              <p class="text-gray-600">Todos los jugadores han tomado su decisión.</p>
+              <p class="text-navy-400">Todos los jugadores han tomado su decisión.</p>
             </div>
           </div>
         </div>

@@ -1,28 +1,32 @@
 <template>
-  <div class="bg-white rounded-xl shadow-lg p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">📋 Historial de Rondas</h2>
+  <div class="glass-card">
+    <h2 class="text-xl sm:text-2xl font-display font-bold text-parchment mb-4 flex items-center gap-2">
+      <span class="text-crimson-400">♦</span>
+      Historial de Rondas
+    </h2>
     
-    <div class="space-y-3">
+    <div class="space-y-2.5">
       <div
         v-for="ronda in rondas"
         :key="ronda.numero"
-        class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r"
+        class="border-l-2 border-crimson-700/40 pl-4 py-2.5 rounded-r-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
       >
         <div class="flex items-center justify-between">
-          <h3 class="font-semibold text-gray-800">Ronda {{ ronda.numero }}</h3>
-          <span class="text-xs text-gray-500">{{ formatearFecha(ronda.fecha) }}</span>
+          <h3 class="font-semibold text-parchment text-sm font-display">Ronda {{ ronda.numero }}</h3>
+          <span class="text-xs text-navy-500">{{ formatearFecha(ronda.fecha) }}</span>
         </div>
         
-        <div class="mt-2 flex flex-wrap gap-3 text-sm">
+        <div class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span
             v-for="jugador in jugadores"
             :key="jugador.id"
-            class="text-gray-700"
+            class="text-navy-300"
           >
-            <span class="font-medium">{{ jugador.nombre }}:</span>
+            <span class="font-medium text-navy-200">{{ jugador.nombre }}:</span>
             <span
+              class="tabular-nums ml-1"
               :class="{
-                'text-green-600 font-bold': ronda.puntos[jugador.id] === -10
+                'score-special': ronda.puntos[jugador.id] === -10
               }"
             >
               {{ ronda.puntos[jugador.id] ?? '-' }}

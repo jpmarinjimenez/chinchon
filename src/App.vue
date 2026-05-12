@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div id="app" class="min-h-screen bg-bicycle-pattern bg-diamond-pattern">
     <router-view />
   </div>
 </template>

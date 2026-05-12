@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="min-h-screen relative z-10">
     <!-- Header -->
     <HeaderBar
       :ronda-actual="gameStore.rondaActual"
@@ -17,23 +17,29 @@
 
       <!-- Resumen final si el juego terminó -->
       <div v-if="gameStore.juegoFinalizado" class="mb-6">
-        <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-2xl shadow-2xl p-8 text-center">
-          <div class="text-6xl mb-4">🏆</div>
-          <h2 class="text-3xl font-bold mb-2">¡Partida Finalizada!</h2>
-          <p v-if="gameStore.ganador?.chinchon" class="text-2xl mb-2 font-bold animate-pulse">
+        <div class="glass-card text-center overflow-hidden relative">
+          <!-- Decorative top strip -->
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-crimson-600 via-gold-400 to-crimson-600"></div>
+
+          <div class="text-5xl sm:text-6xl mb-4 mt-2">🏆</div>
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-parchment mb-2">¡Partida Finalizada!</h2>
+          <p v-if="gameStore.ganador?.chinchon" class="text-xl sm:text-2xl mb-2 font-bold animate-pulse text-gold-400">
             ¡CHINCHÓN! 🎉
           </p>
-          <p class="text-xl mb-4">Ganador: <span class="font-bold">{{ gameStore.ganador?.nombre }}</span></p>
-          <p v-if="gameStore.ganador?.chinchon" class="text-sm opacity-90">Victoria automática por Chinchón</p>
+          <p class="text-lg sm:text-xl mb-1 text-navy-200">
+            Ganador: <span class="font-bold text-parchment font-display">{{ gameStore.ganador?.nombre }}</span>
+          </p>
+          <p v-if="gameStore.ganador?.chinchon" class="text-sm text-gold-500">Victoria automática por Chinchón</p>
+
           <div class="flex flex-wrap gap-3 justify-center mt-6">
-            <button @click="verHistorial" class="btn-secondary bg-white text-orange-600 hover:bg-gray-100">
-              Ver Historial
+            <button @click="verHistorial" class="btn-secondary text-sm">
+              📊 Historial
             </button>
-            <button @click="nuevaPartida" class="btn-primary bg-orange-600 hover:bg-orange-700">
+            <button @click="nuevaPartida" class="btn-primary text-sm">
               ♻️ Nueva Partida
             </button>
-            <button @click="volverAlInicio" class="btn-secondary bg-white text-orange-600 hover:bg-gray-100">
-              🏠 Volver al Inicio
+            <button @click="volverAlInicio" class="btn-secondary text-sm">
+              ← Inicio
             </button>
           </div>
         </div>
@@ -41,35 +47,35 @@
 
       <!-- Vista Desktop: Tabla con columnas -->
       <div class="hidden md:block">
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="glass-card overflow-hidden !p-0">
           <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+            <table class="table-bicycle">
+              <thead>
                 <tr>
-                  <th class="px-4 py-3 text-left font-semibold">Posición</th>
+                  <th class="text-left">Ronda</th>
                   <th
                     v-for="jugador in gameStore.jugadoresOrdenados"
                     :key="jugador.id"
-                    class="px-4 py-3 text-center font-semibold"
-                    :class="{ 'opacity-60': jugador.eliminado }"
+                    class="text-center"
+                    :class="{ 'opacity-40': jugador.eliminado }"
                   >
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center gap-1">
                       <div class="flex items-center gap-2">
                         <span>{{ jugador.nombre }}</span>
                         <button
                           @click="abrirModalEditarNombre(jugador)"
-                          class="text-gray-400 hover:text-blue-600 transition-colors p-1"
+                          class="text-navy-400 hover:text-gold-400 transition-colors p-0.5"
                           :aria-label="`Editar nombre de ${jugador.nombre}`"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                           </svg>
                         </button>
                       </div>
-                      <span v-if="jugador.eliminado" class="text-xs bg-red-500 px-2 py-1 rounded-full mt-1">
+                      <span v-if="jugador.eliminado" class="badge badge-eliminated text-[10px]">
                         Eliminado
                       </span>
-                      <span v-if="jugador.vecesReenganchado > 0" class="text-xs bg-yellow-400 text-gray-800 px-2 py-1 rounded-full mt-1">
+                      <span v-if="jugador.vecesReenganchado > 0" class="badge badge-rehooked text-[10px]">
                         Reenganchado x{{ jugador.vecesReenganchado }}
                       </span>
                     </div>
@@ -81,43 +87,46 @@
                 <tr
                   v-for="(ronda, index) in gameStore.rondas"
                   :key="ronda.numero"
-                  class="border-b hover:bg-gray-50 transition-colors"
                 >
-                  <td class="px-4 py-3 font-semibold text-gray-700">
+                  <td class="font-semibold text-navy-300 text-sm">
                     Ronda {{ ronda.numero }}
                   </td>
                   <td
                     v-for="jugador in gameStore.jugadoresOrdenados"
                     :key="jugador.id"
-                    class="px-4 py-3 text-center"
+                    class="text-center tabular-nums"
                   >
                     <span
                       v-if="ronda.puntos[jugador.id] !== null && ronda.puntos[jugador.id] !== undefined"
                       :class="{
-                        'text-green-600 font-bold text-lg chinchon-animation': ronda.puntos[jugador.id] === -10,
-                        'text-gray-800': ronda.puntos[jugador.id] !== -10
+                        'score-special chinchon-animation': ronda.puntos[jugador.id] === -10,
+                        'text-parchment': ronda.puntos[jugador.id] !== -10
                       }"
                     >
                       {{ ronda.puntos[jugador.id] }}
                     </span>
-                    <span v-else class="text-gray-400">-</span>
+                    <span v-else class="text-navy-600">-</span>
                   </td>
                 </tr>
 
                 <!-- Total acumulado -->
-                <tr class="bg-gradient-to-r from-gray-100 to-gray-200 font-bold text-lg">
-                  <td class="px-4 py-4 text-gray-800">Total</td>
+                <tr class="border-t-2 border-gold-600/30">
+                  <td class="font-bold text-gold-400 py-4 uppercase text-sm tracking-wider">Total</td>
                   <td
                     v-for="jugador in gameStore.jugadoresOrdenados"
                     :key="jugador.id"
-                    class="px-4 py-4 text-center"
-                    :class="{
-                      'text-red-600': jugador.puntosAcumulados >= gameStore.limiteEliminacion,
-                      'text-green-600': jugador.puntosAcumulados <= 0 || jugador.puntosAcumulados < gameStore.limiteEliminacion / 2,
-                      'text-yellow-600': jugador.puntosAcumulados > 0 && jugador.puntosAcumulados >= gameStore.limiteEliminacion / 2 && jugador.puntosAcumulados < gameStore.limiteEliminacion
-                    }"
+                    class="text-center py-4 tabular-nums"
                   >
-                    {{ jugador.puntosAcumulados }}
+                    <span
+                      class="text-lg font-bold font-display"
+                      :class="{
+                        'score-danger': jugador.puntosAcumulados >= gameStore.limiteEliminacion,
+                        'score-safe': jugador.puntosAcumulados <= 0 || jugador.puntosAcumulados < gameStore.limiteEliminacion / 2,
+                        'score-warning': jugador.puntosAcumulados > 0 && jugador.puntosAcumulados >= gameStore.limiteEliminacion / 2 && jugador.puntosAcumulados < gameStore.limiteEliminacion
+                      }"
+                    >
+                      {{ jugador.puntosAcumulados }}
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -127,7 +136,7 @@
       </div>
 
       <!-- Vista Mobile: Tarjetas -->
-      <div class="md:hidden space-y-4">
+      <div class="md:hidden space-y-3">
         <PlayerCard
           v-for="jugador in gameStore.jugadoresOrdenados"
           :key="jugador.id"
