@@ -26,6 +26,36 @@
                 </p>
             </div>
 
+            <!-- Precios de Entrada y Reenganche -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="precioEntrada" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Precio de entrada (€)
+                    </label>
+                    <input
+                        id="precioEntrada"
+                        v-model.number="precioEntrada"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        class="input-field"
+                    />
+                </div>
+                <div>
+                    <label for="precioReenganche" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Precio de reenganche (€)
+                    </label>
+                    <input
+                        id="precioReenganche"
+                        v-model.number="precioReenganche"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        class="input-field"
+                    />
+                </div>
+            </div>
+
             <!-- Nombres de jugadores -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2"> Nombres de los jugadores (2-8) </label>
@@ -93,6 +123,8 @@ export default {
     emits: ['iniciar-juego'],
     setup(props, { emit }) {
         const limite = ref(101);
+        const precioEntrada = ref(0);
+        const precioReenganche = ref(0);
         const nombresJugadores = ref(['', '']);
         const mostrarErrores = ref(false);
 
@@ -130,11 +162,15 @@ export default {
             emit('iniciar-juego', {
                 limite: limite.value,
                 jugadores: nombresJugadores.value.filter((n) => n.trim().length > 0),
+                precioEntrada: precioEntrada.value || 0,
+                precioReenganche: precioReenganche.value || 0,
             });
         };
 
         return {
             limite,
+            precioEntrada,
+            precioReenganche,
             nombresJugadores,
             mostrarErrores,
             limiteValido,

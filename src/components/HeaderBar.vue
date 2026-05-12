@@ -9,6 +9,9 @@
           </h1>
           <p class="text-blue-100 text-sm mt-1">
             Ronda {{ rondaActual }} · Límite: {{ limite }} puntos
+            <span v-if="boteAcumulado > 0" class="ml-2 font-bold text-yellow-300">
+              · Bote: {{ boteAcumulado }}€
+            </span>
           </p>
         </div>
 
@@ -66,6 +69,10 @@ export default {
     limite: {
       type: Number,
       required: true
+    },
+    boteAcumulado: {
+      type: Number,
+      default: 0
     },
     puedeAnadirJugador: {
       type: Boolean,

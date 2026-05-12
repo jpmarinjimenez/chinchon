@@ -4,6 +4,7 @@
     <HeaderBar
       :ronda-actual="gameStore.rondaActual"
       :limite="gameStore.limiteEliminacion"
+      :bote-acumulado="gameStore.boteAcumulado"
       :puede-anadir-jugador="puedeAnadirJugador"
       @finalizar-ronda="abrirModalFinalizarRonda"
       @deshacer-ronda="deshacerRonda"
@@ -211,7 +212,7 @@ export default {
   setup() {
     const router = useRouter()
     const gameStore = useGameStore()
-    const { reproducirSonidoVictoria } = useAudio()
+    const { reproducirSonidoVictoria, reproducirSonidoDinero } = useAudio()
 
     // SEO para página de juego
     useSeo({
@@ -281,6 +282,10 @@ export default {
     const reengancharJugador = (jugadorId) => {
       gameStore.reengancharJugador(jugadorId)
       
+      if (gameStore.precioReenganche > 0) {
+        reproducirSonidoDinero()
+      }
+
       // Remover jugador de la lista
       jugadoresQueAlcanzaronLimite.value = jugadoresQueAlcanzaronLimite.value.filter(
         j => j.id !== jugadorId
@@ -327,9 +332,11 @@ export default {
         // Guardar los nombres de los jugadores actuales
         const nombresJugadores = gameStore.jugadores.map(j => j.nombre)
         const limite = gameStore.limiteEliminacion
+        const precioEntrada = gameStore.precioEntrada
+        const precioReenganche = gameStore.precioReenganche
         
         // Iniciar nueva partida con los mismos jugadores
-        gameStore.iniciarNuevoJuego(limite, nombresJugadores)
+        gameStore.iniciarNuevoJuego(limite, nombresJugadores, precioEntrada, precioReenganche)
       }
     }
 
@@ -360,6 +367,9 @@ export default {
       const resultado = gameStore.anadirJugadorAPartida(nombre)
       
       if (resultado) {
+        if (gameStore.precioEntrada > 0) {
+          reproducirSonidoDinero()
+        }
         // Jugador añadido exitosamente
         cerrarModalAnadirJugador()
       } else {

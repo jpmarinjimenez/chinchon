@@ -172,8 +172,8 @@ export default {
       return gameStore.juegoActivo && gameStore.jugadores.length > 0
     })
 
-    const iniciarNuevaPartida = ({ limite, jugadores }) => {
-      gameStore.iniciarNuevoJuego(limite, jugadores)
+    const iniciarNuevaPartida = ({ limite, jugadores, precioEntrada, precioReenganche }) => {
+      gameStore.iniciarNuevoJuego(limite, jugadores, precioEntrada, precioReenganche)
       router.push('/juego')
     }
 

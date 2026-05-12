@@ -4,6 +4,9 @@ export const useGameStore = defineStore('game', {
   state: () => ({
     // Configuración del juego
     limiteEliminacion: 100,
+    precioEntrada: 0,
+    precioReenganche: 0,
+    boteAcumulado: 0,
     jugadores: [],
     rondas: [],
     juegoActivo: false,
@@ -82,9 +85,14 @@ export const useGameStore = defineStore('game', {
      * Inicializa un nuevo juego
      * @param {number} limite - Puntos límite para ser eliminado
      * @param {Array<string>} nombresJugadores - Array con los nombres de los jugadores
+     * @param {number} precioEntrada - Precio de entrada al juego
+     * @param {number} precioReenganche - Precio por reengancharse
      */
-    iniciarNuevoJuego(limite, nombresJugadores) {
+    iniciarNuevoJuego(limite, nombresJugadores, precioEntrada = 0, precioReenganche = 0) {
       this.limiteEliminacion = limite
+      this.precioEntrada = precioEntrada
+      this.precioReenganche = precioReenganche
+      this.boteAcumulado = nombresJugadores.length * precioEntrada
       this.jugadores = nombresJugadores.map((nombre, index) => ({
         id: `jugador-${Date.now()}-${index}`,
         nombre: nombre.trim(),
@@ -183,6 +191,7 @@ export const useGameStore = defineStore('game', {
       }
       
       jugador.vecesReenganchado++
+      this.boteAcumulado += this.precioReenganche
       
       this.guardarEnLocalStorage()
     },
@@ -275,6 +284,8 @@ export const useGameStore = defineStore('game', {
         const index = this.jugadores.findIndex(j => j.id === jugadorId)
         if (index !== -1) {
           this.jugadores.splice(index, 1)
+          this.boteAcumulado -= this.precioEntrada
+          if (this.boteAcumulado < 0) this.boteAcumulado = 0
           this.guardarEnLocalStorage()
         }
       }
@@ -324,6 +335,9 @@ export const useGameStore = defineStore('game', {
 
       // Añadir el jugador al array
       this.jugadores.push(nuevoJugador)
+
+      // Añadir precio de entrada al bote
+      this.boteAcumulado += this.precioEntrada
 
       // Añadir puntos null en todas las rondas anteriores para este jugador
       this.rondas.forEach(ronda => {
@@ -391,6 +405,9 @@ export const useGameStore = defineStore('game', {
         fecha: this.fechaInicio,
         fechaFin: new Date().toISOString(),
         limiteEliminacion: this.limiteEliminacion,
+        precioEntrada: this.precioEntrada,
+        precioReenganche: this.precioReenganche,
+        boteAcumulado: this.boteAcumulado,
         jugadores: JSON.parse(JSON.stringify(this.jugadores)),
         rondas: JSON.parse(JSON.stringify(this.rondas)),
         ganador: this.ganador ? this.ganador.nombre : 'N/A'
@@ -415,6 +432,9 @@ export const useGameStore = defineStore('game', {
       if (!partida) return
 
       this.limiteEliminacion = partida.limiteEliminacion
+      this.precioEntrada = partida.precioEntrada || 0
+      this.precioReenganche = partida.precioReenganche || 0
+      this.boteAcumulado = partida.boteAcumulado || 0
       this.jugadores = JSON.parse(JSON.stringify(partida.jugadores))
       this.rondas = JSON.parse(JSON.stringify(partida.rondas))
       this.juegoActivo = false
@@ -445,6 +465,9 @@ export const useGameStore = defineStore('game', {
       this.juegoActivo = false
       this.juegoFinalizado = false
       this.limiteEliminacion = 100
+      this.precioEntrada = 0
+      this.precioReenganche = 0
+      this.boteAcumulado = 0
       this.fechaInicio = null
       
       this.guardarEnLocalStorage()
@@ -456,6 +479,9 @@ export const useGameStore = defineStore('game', {
     guardarEnLocalStorage() {
       const estado = {
         limiteEliminacion: this.limiteEliminacion,
+        precioEntrada: this.precioEntrada,
+        precioReenganche: this.precioReenganche,
+        boteAcumulado: this.boteAcumulado,
         jugadores: this.jugadores,
         rondas: this.rondas,
         juegoActivo: this.juegoActivo,
@@ -474,6 +500,9 @@ export const useGameStore = defineStore('game', {
         try {
           const estado = JSON.parse(estadoGuardado)
           this.limiteEliminacion = estado.limiteEliminacion
+          this.precioEntrada = estado.precioEntrada || 0
+          this.precioReenganche = estado.precioReenganche || 0
+          this.boteAcumulado = estado.boteAcumulado || 0
           this.jugadores = estado.jugadores || []
           this.rondas = estado.rondas || []
           this.juegoActivo = estado.juegoActivo || false
