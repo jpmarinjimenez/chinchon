@@ -22,7 +22,7 @@
                     <!-- Body -->
                     <div class="p-5 sm:p-6">
                         <form @submit.prevent="confirmar">
-                            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                            <div class="space-y-3">
                                 <div
                                     v-for="jugador in jugadores"
                                     :key="jugador.id"

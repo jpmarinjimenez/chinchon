@@ -292,14 +292,14 @@
 
   /* ─── MODALS ─── */
   .modal-overlay {
-    @apply fixed inset-0 flex items-center justify-center z-50 p-4;
+    @apply fixed inset-0 flex items-start sm:items-center justify-center z-50 p-4 overflow-y-auto;
     background: rgba(10, 25, 41, 0.85);
     backdrop-filter: blur(8px);
     animation: fadeIn 0.2s ease-out;
   }
 
   .modal-content {
-    @apply rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto;
+    @apply rounded-2xl max-w-2xl w-full max-h-[90dvh] sm:max-h-[85vh] overflow-y-auto;
     background: var(--navy-800);
     border: 1px solid rgba(212, 160, 23, 0.12);
     box-shadow:
