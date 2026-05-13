@@ -24,7 +24,7 @@
                         <form @submit.prevent="confirmar">
                             <div class="space-y-3">
                                 <div
-                                    v-for="jugador in jugadores"
+                                    v-for="(jugador, index) in jugadores"
                                     :key="jugador.id"
                                     class="p-4 rounded-xl border transition-all duration-200"
                                     :class="{
@@ -45,12 +45,13 @@
                                         <div class="flex-1 sm:flex-none sm:w-32">
                                             <label class="block text-xs text-navy-400 mb-1 sm:hidden">Puntos:</label>
                                             <input
+                                                :id="`puntos-${jugador.id}`"
+                                                :name="`puntos-${jugador.id}`"
                                                 v-model.number="puntosRonda[jugador.id]"
-                                                type="number"
+                                                type="text"
                                                 inputmode="numeric"
-                                                min="0"
-                                                max="999"
-                                                step="1"
+                                                pattern="[0-9]*"
+                                                :enterkeyhint="index === jugadores.length - 1 ? 'done' : 'next'"
                                                 class="input-field text-center text-2xl sm:text-lg font-semibold w-full tabular-nums"
                                                 :class="{
                                                     'border-felt-500/40 bg-felt-900/15': hizoMenos10[jugador.id],

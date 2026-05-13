@@ -299,7 +299,7 @@
   }
 
   .modal-content {
-    @apply rounded-2xl max-w-2xl w-full max-h-[90dvh] sm:max-h-[85vh] overflow-y-auto;
+    @apply rounded-2xl max-w-2xl w-full sm:max-h-[85vh] sm:overflow-y-auto;
     background: var(--navy-800);
     border: 1px solid rgba(212, 160, 23, 0.12);
     box-shadow:
