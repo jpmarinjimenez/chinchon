@@ -60,7 +60,8 @@
                                                 required
                                                 :disabled="hizoMenos10[jugador.id]"
                                                 :aria-label="`Puntos para ${jugador.nombre}`"
-                                                ref="inputPuntos" />
+                                                :ref="el => { if (el) inputPuntos[index] = el }"
+                                                @keydown.enter.prevent="enfocarSiguiente(index)" />
                                         </div>
 
                                         <!-- Controles adicionales -->
@@ -232,6 +233,24 @@ export default {
             emit('cerrar');
         };
 
+        const enfocarSiguiente = (index) => {
+            if (index < props.jugadores.length - 1) {
+                // Buscar el siguiente input que no esté deshabilitado
+                for (let i = index + 1; i < props.jugadores.length; i++) {
+                    const nextInput = inputPuntos.value[i];
+                    if (nextInput && !nextInput.disabled) {
+                        nextInput.focus();
+                        return;
+                    }
+                }
+            }
+            
+            // Si es el último o no hay más disponibles, intentar enviar si es válido
+            if (index === props.jugadores.length - 1 && formularioValido.value) {
+                confirmar();
+            }
+        };
+
         return {
             puntosRonda,
             hizoMenos10,
@@ -242,6 +261,7 @@ export default {
             confirmarChinchon,
             confirmar,
             cerrar,
+            enfocarSiguiente,
         };
     },
 };
