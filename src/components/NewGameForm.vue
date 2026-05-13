@@ -72,6 +72,7 @@
                             {{ index % 4 === 0 ? '♠' : index % 4 === 1 ? '♥' : index % 4 === 2 ? '♣' : '♦' }}
                         </div>
                         <input
+                            ref="inputsJugadores"
                             v-model="nombresJugadores[index]"
                             type="text"
                             :placeholder="`Jugador ${index + 1}`"
@@ -127,7 +128,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 
 export default {
     name: 'NewGameForm',
@@ -137,6 +138,7 @@ export default {
         const precioEntrada = ref('0');
         const precioReenganche = ref('0');
         const nombresJugadores = ref(['', '']);
+        const inputsJugadores = ref([]);
         const mostrarErrores = ref(false);
 
         const limiteValido = computed(() => limite.value >= 50);
@@ -151,9 +153,14 @@ export default {
             return nombresJugadores.value[index]?.trim().length > 0;
         };
 
-        const agregarJugador = () => {
+        const agregarJugador = async () => {
             if (nombresJugadores.value.length < 8) {
                 nombresJugadores.value.push('');
+                await nextTick();
+                // Enfocar el último input añadido
+                if (inputsJugadores.value && inputsJugadores.value.length > 0) {
+                    inputsJugadores.value[inputsJugadores.value.length - 1]?.focus();
+                }
             }
         };
 
@@ -183,6 +190,7 @@ export default {
             precioEntrada,
             precioReenganche,
             nombresJugadores,
+            inputsJugadores,
             mostrarErrores,
             limiteValido,
             jugadoresValidos,
