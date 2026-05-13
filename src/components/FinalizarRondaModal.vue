@@ -40,37 +40,17 @@
                                     </div>
 
                                     <!-- Controles: Layout responsive -->
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                                        <!-- Input de puntos -->
-                                        <div class="flex-1 sm:flex-none sm:w-32">
-                                            <label :for="`puntos-${jugador.id}`" class="block text-xs text-navy-400 mb-1 sm:hidden">Puntos:</label>
-                                            <input
-                                                :id="`puntos-${jugador.id}`"
-                                                :name="`puntos-${jugador.id}`"
-                                                v-model.number="puntosRonda[jugador.id]"
-                                                type="tel"
-                                                class="input-field text-center text-2xl sm:text-lg font-semibold w-full tabular-nums"
-                                                :class="{
-                                                    'border-felt-500/40 bg-felt-900/15': hizoMenos10[jugador.id],
-                                                }"
-                                                placeholder="0"
-                                                required
-                                                :disabled="hizoMenos10[jugador.id]"
-                                                :aria-label="`Puntos para ${jugador.nombre}`"
-                                                autocomplete="off" />
-                                        </div>
-
-                                        <!-- Controles adicionales -->
-                                        <div class="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start">
-                                            <!-- Toggle de -10 (Reemplaza al checkbox nativo para no romper tabulación iOS) -->
+                                    <div class="flex flex-col gap-3">
+                                        <!-- Controles adicionales arriba para dejar el input al final -->
+                                        <div class="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start order-1">
+                                            <!-- Toggle de -10 -->
                                             <div
                                                 @click="hizoMenos10[jugador.id] = !hizoMenos10[jugador.id]; manejarMenos10(jugador.id)"
-                                                class="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer select-none transition-all duration-200"
+                                                class="flex-1 sm:flex-none flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer select-none transition-all duration-200"
                                                 :class="hizoMenos10[jugador.id]
                                                     ? 'bg-felt-800/30 border border-felt-600/40'
                                                     : 'bg-white/[0.03] border border-white/8 hover:border-white/15'"
-                                                role="switch"
-                                                :aria-checked="hizoMenos10[jugador.id]"
+                                                tabindex="-1"
                                             >
                                                 <div
                                                     class="w-4 h-4 rounded border flex items-center justify-center transition-colors"
@@ -94,6 +74,29 @@
                                                 class="flex-1 sm:flex-none btn-gold text-sm whitespace-nowrap py-2">
                                                 🏆 Chinchón
                                             </button>
+                                        </div>
+
+                                        <!-- Input de puntos al final del bloque -->
+                                        <div class="flex flex-col order-2">
+                                            <label :for="`puntos-${jugador.id}`" class="block text-xs text-navy-400 mb-1">Puntos:</label>
+                                            <input
+                                                :id="`puntos-${jugador.id}`"
+                                                :name="`puntos-${jugador.id}`"
+                                                v-model.number="puntosRonda[jugador.id]"
+                                                type="text"
+                                                inputmode="numeric"
+                                                pattern="[0-9]*"
+                                                :tabindex="index + 1"
+                                                class="input-field text-center text-2xl font-semibold w-full tabular-nums"
+                                                :class="{
+                                                    'border-felt-500/40 bg-felt-900/15': hizoMenos10[jugador.id],
+                                                }"
+                                                placeholder="0"
+                                                required
+                                                :disabled="hizoMenos10[jugador.id]"
+                                                :aria-label="`Puntos para ${jugador.nombre}`"
+                                                autocomplete="off"
+                                                @keydown.enter.prevent="enfocarSiguiente(index)" />
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +136,7 @@
                                 <button type="button" @click="cerrar" class="btn-secondary text-sm" tabindex="-1">
                                     Cancelar
                                 </button>
-                                <button type="submit" class="btn-felt text-sm" :disabled="!formularioValido">
+                                <button type="submit" class="btn-felt text-sm" :disabled="!formularioValido" :tabindex="jugadores.length + 1">
                                     ✓ Confirmar Ronda
                                 </button>
                             </div>
