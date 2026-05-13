@@ -51,6 +51,7 @@
                                                 type="text"
                                                 inputmode="numeric"
                                                 pattern="[0-9]*"
+                                                :tabindex="index + 1"
                                                 :enterkeyhint="index === jugadores.length - 1 ? 'done' : 'next'"
                                                 class="input-field text-center text-2xl sm:text-lg font-semibold w-full tabular-nums"
                                                 :class="{
@@ -66,27 +67,29 @@
 
                                         <!-- Controles adicionales -->
                                         <div class="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start">
-                                            <!-- Checkbox de -10 -->
-                                            <label
-                                                :for="`menos10-${jugador.id}`"
+                                            <!-- Toggle de -10 (Reemplaza al checkbox nativo para no romper tabulación iOS) -->
+                                            <div
+                                                @click="hizoMenos10[jugador.id] = !hizoMenos10[jugador.id]; manejarMenos10(jugador.id)"
                                                 class="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer select-none transition-all duration-200"
                                                 :class="hizoMenos10[jugador.id]
                                                     ? 'bg-felt-800/30 border border-felt-600/40'
                                                     : 'bg-white/[0.03] border border-white/8 hover:border-white/15'"
+                                                role="switch"
+                                                :aria-checked="hizoMenos10[jugador.id]"
                                             >
-                                                <input
-                                                    :id="`menos10-${jugador.id}`"
-                                                    v-model="hizoMenos10[jugador.id]"
-                                                    type="checkbox"
-                                                    tabindex="-1"
-                                                    class="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
-                                                    :aria-label="`${jugador.nombre} hizo -10`"
-                                                    @change="manejarMenos10(jugador.id)" />
+                                                <div
+                                                    class="w-4 h-4 rounded border flex items-center justify-center transition-colors"
+                                                    :class="hizoMenos10[jugador.id] ? 'bg-emerald-500 border-emerald-500' : 'bg-transparent border-navy-400'"
+                                                >
+                                                    <svg v-if="hizoMenos10[jugador.id]" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </div>
                                                 <span class="text-sm font-semibold whitespace-nowrap"
                                                     :class="hizoMenos10[jugador.id] ? 'text-green-300' : 'text-navy-300'">
                                                     -10 ✨
                                                 </span>
-                                            </label>
+                                            </div>
 
                                             <!-- Botón Chinchón -->
                                             <button
@@ -135,7 +138,7 @@
                                 <button type="button" @click="cerrar" class="btn-secondary text-sm" tabindex="-1">
                                     Cancelar
                                 </button>
-                                <button type="submit" class="btn-felt text-sm" :disabled="!formularioValido">
+                                <button type="submit" class="btn-felt text-sm" :disabled="!formularioValido" :tabindex="jugadores.length + 1">
                                     ✓ Confirmar Ronda
                                 </button>
                             </div>
