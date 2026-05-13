@@ -35,12 +35,12 @@
                     </label>
                     <input
                         id="precioEntrada"
-                        v-model.number="precioEntrada"
-                        type="number"
+                        v-model="precioEntrada"
+                        type="text"
                         inputmode="decimal"
-                        min="0"
-                        step="0.5"
                         class="input-field"
+                        placeholder="0"
+                        @input="precioEntrada = precioEntrada.replace(/[^0-9.,]/g, '').replace(/(\..*)\./g, '$1').replace(/(,.*),/g, '$1')"
                     />
                 </div>
                 <div>
@@ -49,12 +49,12 @@
                     </label>
                     <input
                         id="precioReenganche"
-                        v-model.number="precioReenganche"
-                        type="number"
+                        v-model="precioReenganche"
+                        type="text"
                         inputmode="decimal"
-                        min="0"
-                        step="0.5"
                         class="input-field"
+                        placeholder="0"
+                        @input="precioReenganche = precioReenganche.replace(/[^0-9.,]/g, '').replace(/(\..*)\./g, '$1').replace(/(,.*),/g, '$1')"
                     />
                 </div>
             </div>
@@ -134,8 +134,8 @@ export default {
     emits: ['iniciar-juego'],
     setup(props, { emit }) {
         const limite = ref(101);
-        const precioEntrada = ref(0);
-        const precioReenganche = ref(0);
+        const precioEntrada = ref('0');
+        const precioReenganche = ref('0');
         const nombresJugadores = ref(['', '']);
         const mostrarErrores = ref(false);
 
@@ -173,8 +173,8 @@ export default {
             emit('iniciar-juego', {
                 limite: limite.value,
                 jugadores: nombresJugadores.value.filter((n) => n.trim().length > 0),
-                precioEntrada: precioEntrada.value || 0,
-                precioReenganche: precioReenganche.value || 0,
+                precioEntrada: parseFloat(precioEntrada.value.toString().replace(',', '.')) || 0,
+                precioReenganche: parseFloat(precioReenganche.value.toString().replace(',', '.')) || 0,
             });
         };
 
